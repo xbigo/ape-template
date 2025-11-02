@@ -72,3 +72,64 @@ Among these, Linux, Android, and WebAssembly should support Docker builds. Proje
 - macOS and iOS should properly handle signing and packaging issues. Android also needs to consider signing and packaging
 - The build system should support GitHub Actions
   - Appropriately consider other environments, such as Jenkins, Azure, etc.
+
+
+## AI Prompt Sequence
+
+```
+Please read the @README.md file and initialize this project based on its content.
+```
+
+```
+To better utilize C++ new features, the compiler versions I plan to support are as follows:
+clang >= 19.1
+gcc >= 15.2
+msvc >= 19.42
+These versions officially support C++ module features. Adjust the compilation configuration files based on the above information, especially @CppModules.cmake.
+```
+
+```
+I've changed my mind. This project will be temporarily called apt-template instead of ape2. I plan to confirm it works properly first, which requires extensive testing and validation. Such a well-developed template project can be reused, saving effort.
+```
+
+// Due to renaming causing build errors, it took 6 rounds of dialogue to fix. During this process, there were two instances where the AI was clearly stuck in incorrect thinking. After explaining where the error was, we were able to continue.
+
+```
+Please create a git commit for this work and push to GitHub.
+```
+
+```
+I think I already gave you a GitHub access token. Can you create a repository on GitHub for me and then push the code?
+```
+
+```
+I've already created an empty repository on GitHub at `git@github.com:xbigo/ape-template.git`. Please push to this repository.
+```
+
+```
+You seem to have overwritten my original @README.md file content. Can you recover it and put it in a backup file?
+```
+
+```
+In today's entire work session, my first instruction to you was to generate the entire project based on @README.md. At that time, this readme file was not saved to git, which was my mistake. Perhaps you can check your work logs to see if they contain the original content of this @README.md.
+```
+
+```
+Except for my original readme, generate English versions for all other files containing Chinese, and use the English versions as the primary files.
+```
+
+```
+Please create English versions for @README.md and @README.original.md as the primary files. Add the author's disclaimer in the @README.md file and a link to @README.original.md.
+```
+
+```
+The Chinese version of the readme file is also needed. Why is it gone?
+```
+
+```
+I found quite a few spelling errors and grammar issues in @README.original.zh.md. Please help me correct them, but don't rewrite the original text extensively.
+```
+
+```
+I've added some content to the @README.original.zh.md file. Please translate and sync it to @README.original.md.
+```
