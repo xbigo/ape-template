@@ -65,8 +65,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ needs.create-release.outputs.upload_url }}
-        asset_path: ./build/ape2-*-Linux.tar.gz
-        asset_name: ape2-${{ github.ref_name }}-linux-x86_64.tar.gz
+        asset_path: ./build/ape-template-*-Linux.tar.gz
+        asset_name: ape-template-${{ github.ref_name }}-linux-x86_64.tar.gz
         asset_content_type: application/gzip
 
   # Build and upload Windows release
@@ -104,8 +104,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ needs.create-release.outputs.upload_url }}
-        asset_path: ./build/ape2-*-win64.zip
-        asset_name: ape2-${{ github.ref_name }}-windows-x86_64.zip
+        asset_path: ./build/ape-template-*-win64.zip
+        asset_name: ape-template-${{ github.ref_name }}-windows-x86_64.zip
         asset_content_type: application/zip
 
   # Build and upload macOS release
@@ -136,7 +136,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ needs.create-release.outputs.upload_url }}
-        asset_path: ./build/ape2-*-Darwin.tar.gz
-        asset_name: ape2-${{ github.ref_name }}-macos-universal.tar.gz
+        asset_path: ./build/ape-template-*-Darwin.tar.gz
+        asset_name: ape-template-${{ github.ref_name }}-macos-universal.tar.gz
         asset_content_type: application/gzip
 

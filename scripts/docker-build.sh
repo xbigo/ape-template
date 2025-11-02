@@ -1,5 +1,5 @@
 #!/bin/bash
-# Docker build helper script for ape2 project
+# Docker build helper script for ape-template project
 
 set -e
 
@@ -80,11 +80,11 @@ esac
 
 # Set platform-specific variables
 DOCKERFILE_DIR="docker/$PLATFORM"
-IMAGE_NAME="ape2-$PLATFORM:latest"
-CONTAINER_NAME="ape2-$PLATFORM-build"
+IMAGE_NAME="ape-template-$PLATFORM:latest"
+CONTAINER_NAME="ape-template-$PLATFORM-build"
 BUILD_DIR="build-$PLATFORM-${BUILD_TYPE,,}"
 
-echo -e "${GREEN}Building ape2 for platform: $PLATFORM${NC}"
+echo -e "${GREEN}Building ape-template for platform: $PLATFORM${NC}"
 echo -e "${GREEN}Build type: $BUILD_TYPE${NC}"
 echo -e "${GREEN}Compiler: $COMPILER${NC}"
 

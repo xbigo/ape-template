@@ -1,6 +1,6 @@
-# Contributing to ape2
+# Contributing to ape-template
 
-Thank you for your interest in contributing to ape2! This document provides guidelines and instructions for contributing.
+Thank you for your interest in contributing to ape-template! This document provides guidelines and instructions for contributing.
 
 ## Table of Contents
 
@@ -21,12 +21,12 @@ This project adheres to a code of conduct. By participating, you are expected to
 1. Fork the repository
 2. Clone your fork:
    ```bash
-   git clone https://github.com/xbigo/ape2.git
-   cd ape2
+   git clone https://github.com/xbigo/ape-template.git
+   cd ape-template
    ```
 3. Add the upstream repository:
    ```bash
-   git remote add upstream https://github.com/originalowner/ape2.git
+   git remote add upstream https://github.com/originalowner/ape-template.git
    ```
 4. Create a development branch:
    ```bash
@@ -97,7 +97,7 @@ cmake --build build
 Example:
 
 ```cpp
-namespace ape2::utils {
+namespace ape-template::utils {
 
 class StringParser {
 public:
@@ -112,12 +112,12 @@ private:
 
 constexpr int MAX_BUFFER_SIZE = 1024;
 
-} // namespace ape2::utils
+} // namespace ape-template::utils
 ```
 
 ### File Organization
 
-- Header files: `include/ape2/module/file.hpp`
+- Header files: `include/ape-template/module/file.hpp`
 - Source files: `src/module/file.cpp`
 - Test files: `tests/unit/test_file.cpp`
 
@@ -128,7 +128,7 @@ Use `#pragma once` for header guards:
 ```cpp
 #pragma once
 
-namespace ape2 {
+namespace ape-template {
 // declarations
 }
 ```
@@ -184,9 +184,9 @@ Example test:
 
 ```cpp
 #include <gtest/gtest.h>
-#include "ape2/utils/string_utils.hpp"
+#include "ape-template/utils/string_utils.hpp"
 
-namespace ape2::utils::test {
+namespace ape-template::utils::test {
 
 TEST(StringUtilsTest, TrimRemovesWhitespace) {
     EXPECT_EQ(trim("  hello  "), "hello");
@@ -202,7 +202,7 @@ TEST(StringUtilsTest, SplitDividesString) {
     EXPECT_EQ(result[2], "c");
 }
 
-} // namespace ape2::utils::test
+} // namespace ape-template::utils::test
 ```
 
 ### Test Coverage
@@ -302,5 +302,5 @@ If you have questions:
 - Check existing issues and pull requests
 - Review project documentation
 
-Thank you for contributing to ape2!
+Thank you for contributing to ape-template!
 

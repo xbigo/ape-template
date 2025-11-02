@@ -1,6 +1,6 @@
 # 项目重命名检查清单
 
-本文档列出从 `ape2` 到 `ape-template` 的重命名进度和剩余工作。
+本文档列出从 `ape-template` 到 `ape-template` 的重命名进度和剩余工作。
 
 ## ✅ 已完成的更改
 
@@ -13,8 +13,8 @@
 - [x] `cmake/modules/CompilerWarnings.cmake` - 警告库名称
 
 ### 2. 目录和文件 ✅
-- [x] `include/ape2/` → `include/ape_template/`
-- [x] `cmake/ape2Config.cmake.in` → `cmake/ape-templateConfig.cmake.in`
+- [x] `include/ape-template/` → `include/ape_template/`
+- [x] `cmake/ape-templateConfig.cmake.in` → `cmake/ape-templateConfig.cmake.in`
 
 ### 3. 源代码和头文件 ✅
 - [x] `include/ape_template/core/version.hpp` - 命名空间
@@ -38,7 +38,7 @@
 
 ## 🔄 需要更新的文件
 
-以下文件包含 `ape2` 或 `APE2` 引用，需要批量更新：
+以下文件包含 `ape-template` 或 `APE2` 引用，需要批量更新：
 
 ### Docker配置
 - [ ] `docker/linux/Dockerfile` - 注释和标签
@@ -46,7 +46,7 @@
 - [ ] `docker/webassembly/Dockerfile` - 注释和标签
 
 ### 构建脚本
-- [ ] `scripts/docker-build.sh` - 镜像名称 `ape2-*` → `ape-template-*`
+- [ ] `scripts/docker-build.sh` - 镜像名称 `ape-template-*` → `ape-template-*`
 - [ ] `scripts/docker-build.ps1` - 镜像名称
 - [ ] `scripts/docker-shell.sh` - 镜像名称和容器名称
 
@@ -85,59 +85,59 @@
 使用以下命令进行批量替换（Linux/macOS）：
 
 ```bash
-# 替换 ape2:: 为 ape_template::
+# 替换 ape-template:: 为 ape_template::
 find . -type f \( -name "*.md" -o -name "*.yml" -o -name "*.yaml" -o -name "*.sh" -o -name "*.ps1" -o -name "*.txt" -o -name "*.py" -o -name "*.json" \) \
-  -exec sed -i '' 's/ape2::/ape_template::/g' {} +
+  -exec sed -i '' 's/ape-template::/ape_template::/g' {} +
 
-# 替换 ape2_ 为 ape_template_
+# 替换 ape-template_ 为 ape_template_
 find . -type f \( -name "*.md" -o -name "*.yml" -o -name "*.yaml" -o -name "*.sh" -o -name "*.ps1" \) \
-  -exec sed -i '' 's/ape2_/ape_template_/g' {} +
+  -exec sed -i '' 's/ape-template_/ape_template_/g' {} +
 
-# 替换 ape2- 为 ape-template-
+# 替换 ape-template- 为 ape-template-
 find . -type f \( -name "*.md" -o -name "*.yml" -o -name "*.yaml" -o -name "*.sh" -o -name "*.ps1" \) \
-  -exec sed -i '' 's/ape2-/ape-template-/g' {} +
+  -exec sed -i '' 's/ape-template-/ape-template-/g' {} +
 
 # 替换 APE2_ 为 APE_TEMPLATE_
 find . -type f \( -name "*.md" -o -name "*.yml" -o -name "*.yaml" -o -name "*.sh" -o -name "*.ps1" \) \
   -exec sed -i '' 's/APE2_/APE_TEMPLATE_/g' {} +
 
-# 替换 /ape2 为 /ape_template（路径）
+# 替换 /ape-template 为 /ape_template（路径）
 find . -type f \( -name "*.md" -o -name "*.yml" -o -name "*.yaml" \) \
-  -exec sed -i '' 's/\/ape2/\/ape_template/g' {} +
+  -exec sed -i '' 's/\/ape-template/\/ape_template/g' {} +
 ```
 
 Windows PowerShell：
 
 ```powershell
-# 替换文本中的 ape2
+# 替换文本中的 ape-template
 Get-ChildItem -Recurse -Include *.md,*.yml,*.yaml,*.sh,*.ps1,*.txt,*.py,*.json |
   ForEach-Object {
-    (Get-Content $_.FullName -Raw) -replace 'ape2::','ape_template::' -replace 'ape2_','ape_template_' -replace 'ape2-','ape-template-' -replace 'APE2_','APE_TEMPLATE_' -replace '/ape2','ape_template' |
+    (Get-Content $_.FullName -Raw) -replace 'ape-template::','ape_template::' -replace 'ape-template_','ape_template_' -replace 'ape-template-','ape-template-' -replace 'APE2_','APE_TEMPLATE_' -replace '/ape-template','ape_template' |
     Set-Content $_.FullName -NoNewline
   }
 ```
 
 ## ⚠️ 特别注意
 
-1. **URL更新**：所有GitHub URL需要从 `xbigo/ape2` 更新为 `xbigo/ape-template`
+1. **URL更新**：所有GitHub URL需要从 `xbigo/ape-template` 更新为 `xbigo/ape-template`
 
-2. **镜像名称**：Docker镜像名称需要从 `ape2-linux` 等更新为 `ape-template-linux`
+2. **镜像名称**：Docker镜像名称需要从 `ape-template-linux` 等更新为 `ape-template-linux`
 
 3. **构建产物**：CI/CD中的构建产物名称需要更新
 
 4. **变量前缀**：所有CMake变量从 `APE2_*` 更新为 `APE_TEMPLATE_*`
 
-5. **库名称**：所有库从 `ape2_*` 更新为 `ape_template_*`
+5. **库名称**：所有库从 `ape-template_*` 更新为 `ape_template_*`
 
-6. **命名空间**：所有C++命名空间从 `ape2::` 更新为 `ape_template::`
+6. **命名空间**：所有C++命名空间从 `ape-template::` 更新为 `ape_template::`
 
 ## ✅ 验证清单
 
 完成所有更改后，执行以下检查：
 
 ```bash
-# 1. 搜索残留的 ape2 引用（应该没有结果或只有历史文档）
-grep -r "ape2" --exclude-dir=.git --exclude-dir=build* .
+# 1. 搜索残留的 ape-template 引用（应该没有结果或只有历史文档）
+grep -r "ape-template" --exclude-dir=.git --exclude-dir=build* .
 
 # 2. 搜索残留的 APE2 引用
 grep -r "APE2" --exclude-dir=.git --exclude-dir=build* .
@@ -177,7 +177,7 @@ docker images | grep ape-template
 5. **提交更改** ⏳
    ```bash
    git add .
-   git commit -m "Rename project from ape2 to ape-template"
+   git commit -m "Rename project from ape-template to ape-template"
    ```
 
 ## 🎯 最终目标

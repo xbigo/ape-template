@@ -1,6 +1,6 @@
 # Build Instructions
 
-This document provides detailed instructions for building the ape2 project on different platforms.
+This document provides detailed instructions for building the ape-template project on different platforms.
 
 ## Table of Contents
 
@@ -40,8 +40,8 @@ This document provides detailed instructions for building the ape2 project on di
 
 ```bash
 # Clone the repository
-git clone https://github.com/xbigo/ape2.git
-cd ape2
+git clone https://github.com/xbigo/ape-template.git
+cd ape-template
 
 # Configure
 cmake -B build -DCMAKE_BUILD_TYPE=Release -G Ninja
@@ -67,7 +67,7 @@ cmake -B build -G "Visual Studio 17 2022" -A x64
 cmake --build build --config Release
 
 # Or open the solution in Visual Studio
-start build\ape2.sln
+start build\ape-template.sln
 ```
 
 #### Using Ninja
@@ -109,7 +109,7 @@ cmake --build build --parallel
 
 # Or with Xcode
 cmake -B build -G Xcode
-open build/ape2.xcodeproj
+open build/ape-template.xcodeproj
 ```
 
 ### Android
@@ -244,8 +244,8 @@ bash scripts/docker-build.sh -p linux -t Release -r
 powershell scripts/docker-build.ps1 -Platform linux -BuildType Release -RunTests
 
 # Manual Docker build
-docker build -t ape2-linux docker/linux
-docker run --rm -v $(pwd):/workspace -w /workspace ape2-linux \
+docker build -t ape-template-linux docker/linux
+docker run --rm -v $(pwd):/workspace -w /workspace ape-template-linux \
     bash -c "cmake -B /build -G Ninja && cmake --build /build"
 ```
 

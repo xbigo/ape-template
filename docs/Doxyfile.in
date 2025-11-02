@@ -1,4 +1,4 @@
-# Doxyfile configuration for ape2 project
+# Doxyfile configuration for ape-template project
 
 PROJECT_NAME           = "@PROJECT_NAME@"
 PROJECT_NUMBER         = "@PROJECT_VERSION@"

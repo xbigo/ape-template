@@ -1,4 +1,4 @@
-# Docker build helper script for ape2 project (PowerShell)
+# Docker build helper script for ape-template project (PowerShell)
 
 param(
     [string]$Platform = "linux",
@@ -33,11 +33,11 @@ if ($Platform -notin @("linux", "android", "webassembly")) {
 }
 
 $DockerfileDir = "docker\$Platform"
-$ImageName = "ape2-${Platform}:latest"
-$ContainerName = "ape2-${Platform}-build"
+$ImageName = "ape-template-${Platform}:latest"
+$ContainerName = "ape-template-${Platform}-build"
 $BuildDir = "build-$Platform-$($BuildType.ToLower())"
 
-Write-Host "Building ape2 for platform: $Platform" -ForegroundColor Green
+Write-Host "Building ape-template for platform: $Platform" -ForegroundColor Green
 Write-Host "Build type: $BuildType" -ForegroundColor Green
 Write-Host "Compiler: $Compiler" -ForegroundColor Green
 

@@ -1,6 +1,6 @@
 # Compiler Version Requirements
 
-本文档详细说明了ape2项目对编译器版本的要求。
+本文档详细说明了ape-template项目对编译器版本的要求。
 
 ## 📋 最低版本要求
 

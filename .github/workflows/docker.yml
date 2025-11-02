@@ -21,7 +21,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t ape2-linux:latest docker/linux
+        docker build -t ape-template-linux:latest docker/linux
 
     - name: Build project in Docker
       run: |
@@ -29,7 +29,7 @@ jobs:
           -v ${{ github.workspace }}:/workspace \
           -v ${{ github.workspace }}/build-docker:/build \
           -w /workspace \
-          ape2-linux:latest \
+          ape-template-linux:latest \
           bash -c "cmake -B /build -S /workspace -G Ninja -DCMAKE_BUILD_TYPE=Release && cmake --build /build --parallel"
 
     - name: Run tests in Docker
@@ -38,7 +38,7 @@ jobs:
           -v ${{ github.workspace }}:/workspace \
           -v ${{ github.workspace }}/build-docker:/build \
           -w /build \
-          ape2-linux:latest \
+          ape-template-linux:latest \
           bash -c "ctest --output-on-failure"
 
     - name: Upload artifacts
@@ -62,7 +62,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t ape2-android:latest docker/android
+        docker build -t ape-template-android:latest docker/android
 
     - name: Build project in Docker (arm64-v8a)
       run: |
@@ -70,7 +70,7 @@ jobs:
           -v ${{ github.workspace }}:/workspace \
           -v ${{ github.workspace }}/build-android:/build \
           -w /workspace \
-          ape2-android:latest \
+          ape-template-android:latest \
           bash -c "cmake -B /build -S /workspace \
             -DCMAKE_TOOLCHAIN_FILE=/opt/android-sdk/ndk/26.1.10909125/build/cmake/android.toolchain.cmake \
             -DANDROID_ABI=arm64-v8a \
@@ -101,7 +101,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t ape2-wasm:latest docker/webassembly
+        docker build -t ape-template-wasm:latest docker/webassembly
 
     - name: Build project in Docker
       run: |
@@ -109,7 +109,7 @@ jobs:
           -v ${{ github.workspace }}:/workspace \
           -v ${{ github.workspace }}/build-wasm:/build \
           -w /workspace \
-          ape2-wasm:latest \
+          ape-template-wasm:latest \
           bash -c "source /opt/emsdk/emsdk_env.sh && \
             emcmake cmake -B /build -S /workspace -G Ninja -DCMAKE_BUILD_TYPE=Release -DAPE2_BUILD_TESTS=OFF && \
             cmake --build /build --parallel"

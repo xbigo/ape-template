@@ -3,11 +3,11 @@ from conan.tools.cmake import CMake, CMakeToolchain, CMakeDeps, cmake_layout
 
 
 class Ape2Conan(ConanFile):
-    name = "ape2"
+    name = "ape-template"
     version = "0.1.0"
     license = "MIT"  # Change to your license
     author = "Your Name <your.email@example.com>"
-    url = "https://github.com/xbigo/ape2"
+    url = "https://github.com/xbigo/ape-template"
     description = "A comprehensive C++ library collection"
     topics = ("cpp", "library", "cross-platform")
     settings = "os", "compiler", "build_type", "arch"
@@ -64,6 +64,6 @@ class Ape2Conan(ConanFile):
         cmake.install()
 
     def package_info(self):
-        self.cpp_info.libs = ["ape2_core", "ape2_utils"]
+        self.cpp_info.libs = ["ape-template_core", "ape-template_utils"]
         self.cpp_info.includedirs = ["include"]
 

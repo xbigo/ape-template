@@ -1,5 +1,5 @@
 ---
-# .clang-format configuration for ape2 project
+# .clang-format configuration for ape-template project
 # Based on C++23 standards and modern best practices
 
 BasedOnStyle: LLVM
@@ -65,7 +65,7 @@ IncludeBlocks: Regroup
 SortIncludes: CaseSensitive
 IncludeCategories:
   # Main header
-  - Regex:           '^"ape2/'
+  - Regex:           '^"ape-template/'
     Priority:        1
   # C system headers
   - Regex:           '^<[a-z_]+\.h>'

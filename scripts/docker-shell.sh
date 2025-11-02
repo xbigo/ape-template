@@ -22,8 +22,8 @@ case $PLATFORM in
         ;;
 esac
 
-IMAGE_NAME="ape2-$PLATFORM:latest"
-CONTAINER_NAME="ape2-$PLATFORM-shell"
+IMAGE_NAME="ape-template-$PLATFORM:latest"
+CONTAINER_NAME="ape-template-$PLATFORM-shell"
 
 # Build image if it doesn't exist
 if ! docker image inspect "$IMAGE_NAME" >/dev/null 2>&1; then

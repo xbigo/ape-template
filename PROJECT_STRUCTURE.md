@@ -1,11 +1,11 @@
 # Project Structure
 
-This document provides an overview of the ape2 project structure.
+This document provides an overview of the ape-template project structure.
 
 ## Directory Layout
 
 ```
-ape2/
+ape-template/
 ├── .github/                    # GitHub configuration
 │   └── workflows/             # GitHub Actions workflows
 │       ├── ci.yml            # Continuous integration
@@ -28,7 +28,7 @@ ape2/
 │   │   ├── DistributedBuild.cmake    # Distributed compilation
 │   │   ├── Sanitizers.cmake          # Sanitizer configurations
 │   │   └── ThirdParty.cmake          # Third-party dependencies
-│   └── ape2Config.cmake.in   # Package config template
+│   └── ape-templateConfig.cmake.in   # Package config template
 │
 ├── docker/                    # Docker configurations
 │   ├── android/              # Android NDK environment
@@ -45,7 +45,7 @@ ape2/
 │   └── Doxyfile.in           # Doxygen configuration
 │
 ├── include/                   # Public headers
-│   └── ape2/
+│   └── ape-template/
 │       ├── core/             # Core library headers
 │       │   └── version.hpp
 │       └── utils/            # Utilities headers
@@ -149,17 +149,17 @@ build-wasm/                   # WebAssembly build output
 
 ## Module Organization
 
-### Core Library (`ape2::core`)
+### Core Library (`ape-template::core`)
 
-Located in `src/core/` and `include/ape2/core/`
+Located in `src/core/` and `include/ape-template/core/`
 
 Contains fundamental functionality:
 - Version information
 - Core types and utilities
 
-### Utils Library (`ape2::utils`)
+### Utils Library (`ape-template::utils`)
 
-Located in `src/utils/` and `include/ape2/utils/`
+Located in `src/utils/` and `include/ape-template/utils/`
 
 Contains utility functions:
 - String manipulation
@@ -282,7 +282,7 @@ Configures distributed compilation:
 
 ### Adding a New Library
 
-1. Create directories: `src/newlib/` and `include/ape2/newlib/`
+1. Create directories: `src/newlib/` and `include/ape-template/newlib/`
 2. Add `src/newlib/CMakeLists.txt`
 3. Update `src/CMakeLists.txt` to include new library
 4. Create tests in `tests/unit/test_newlib.cpp`
@@ -304,7 +304,7 @@ Configures distributed compilation:
 
 ## Best Practices
 
-- Keep public headers in `include/ape2/`
+- Keep public headers in `include/ape-template/`
 - Keep implementation in `src/`
 - Write tests for all new code
 - Format code with clang-format

@@ -1,5 +1,5 @@
 ---
-# .clang-tidy configuration for ape2 project
+# .clang-tidy configuration for ape-template project
 # Comprehensive checks for C++23 code quality and safety
 
 Checks: >
@@ -37,7 +37,7 @@ Checks: >
 WarningsAsErrors: ''
 
 # Header filter - check all project headers
-HeaderFilterRegex: '.*\/ape2\/.*'
+HeaderFilterRegex: '.*\/ape-template\/.*'
 
 # Analysis options
 AnalyzeTemporaryDtors: true

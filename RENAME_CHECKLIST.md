@@ -1,6 +1,6 @@
 # Project Rename Checklist
 
-This document lists the progress and remaining work for renaming from `ape2` to `ape-template`.
+This document lists the progress and remaining work for renaming from `ape-template` to `ape-template`.
 
 ## ✅ Completed Changes
 
@@ -13,8 +13,8 @@ This document lists the progress and remaining work for renaming from `ape2` to 
 - [x] `cmake/modules/CompilerWarnings.cmake` - Warning library name
 
 ### 2. Directories and Files ✅
-- [x] `include/ape2/` → `include/ape_template/`
-- [x] `cmake/ape2Config.cmake.in` → `cmake/ape-templateConfig.cmake.in`
+- [x] `include/ape-template/` → `include/ape_template/`
+- [x] `cmake/ape-templateConfig.cmake.in` → `cmake/ape-templateConfig.cmake.in`
 
 ### 3. Source Code and Headers ✅
 - [x] `include/ape_template/core/version.hpp` - Namespace
@@ -38,7 +38,7 @@ This document lists the progress and remaining work for renaming from `ape2` to 
 
 ## 🔄 Files Needing Updates
 
-The following files contain `ape2` or `APE2` references and need bulk updates:
+The following files contain `ape-template` or `APE2` references and need bulk updates:
 
 ### Docker Configuration
 - [ ] `docker/linux/Dockerfile` - Comments and labels
@@ -46,7 +46,7 @@ The following files contain `ape2` or `APE2` references and need bulk updates:
 - [ ] `docker/webassembly/Dockerfile` - Comments and labels
 
 ### Build Scripts
-- [ ] `scripts/docker-build.sh` - Image names `ape2-*` → `ape-template-*`
+- [ ] `scripts/docker-build.sh` - Image names `ape-template-*` → `ape-template-*`
 - [ ] `scripts/docker-build.ps1` - Image names
 - [ ] `scripts/docker-shell.sh` - Image names and container names
 
@@ -85,59 +85,59 @@ The following files contain `ape2` or `APE2` references and need bulk updates:
 Use the following commands for bulk replacement (Linux/macOS):
 
 ```bash
-# Replace ape2:: with ape_template::
+# Replace ape-template:: with ape_template::
 find . -type f \( -name "*.md" -o -name "*.yml" -o -name "*.yaml" -o -name "*.sh" -o -name "*.ps1" -o -name "*.txt" -o -name "*.py" -o -name "*.json" \) \
-  -exec sed -i '' 's/ape2::/ape_template::/g' {} +
+  -exec sed -i '' 's/ape-template::/ape_template::/g' {} +
 
-# Replace ape2_ with ape_template_
+# Replace ape-template_ with ape_template_
 find . -type f \( -name "*.md" -o -name "*.yml" -o -name "*.yaml" -o -name "*.sh" -o -name "*.ps1" \) \
-  -exec sed -i '' 's/ape2_/ape_template_/g' {} +
+  -exec sed -i '' 's/ape-template_/ape_template_/g' {} +
 
-# Replace ape2- with ape-template-
+# Replace ape-template- with ape-template-
 find . -type f \( -name "*.md" -o -name "*.yml" -o -name "*.yaml" -o -name "*.sh" -o -name "*.ps1" \) \
-  -exec sed -i '' 's/ape2-/ape-template-/g' {} +
+  -exec sed -i '' 's/ape-template-/ape-template-/g' {} +
 
 # Replace APE2_ with APE_TEMPLATE_
 find . -type f \( -name "*.md" -o -name "*.yml" -o -name "*.yaml" -o -name "*.sh" -o -name "*.ps1" \) \
   -exec sed -i '' 's/APE2_/APE_TEMPLATE_/g' {} +
 
-# Replace /ape2 with /ape_template (paths)
+# Replace /ape-template with /ape_template (paths)
 find . -type f \( -name "*.md" -o -name "*.yml" -o -name "*.yaml" \) \
-  -exec sed -i '' 's/\/ape2/\/ape_template/g' {} +
+  -exec sed -i '' 's/\/ape-template/\/ape_template/g' {} +
 ```
 
 Windows PowerShell:
 
 ```powershell
-# Replace ape2 in text
+# Replace ape-template in text
 Get-ChildItem -Recurse -Include *.md,*.yml,*.yaml,*.sh,*.ps1,*.txt,*.py,*.json |
   ForEach-Object {
-    (Get-Content $_.FullName) -replace 'ape2::','ape_template::' -replace 'ape2_','ape_template_' -replace 'ape2-','ape-template-' -replace 'APE2_','APE_TEMPLATE_' -replace '/ape2','ape_template' |
+    (Get-Content $_.FullName) -replace 'ape-template::','ape_template::' -replace 'ape-template_','ape_template_' -replace 'ape-template-','ape-template-' -replace 'APE2_','APE_TEMPLATE_' -replace '/ape-template','ape_template' |
     Set-Content $_.FullName
   }
 ```
 
 ## ⚠️ Special Notes
 
-1. **URL Updates**: All GitHub URLs need to be updated from `xbigo/ape2` to `xbigo/ape-template`
+1. **URL Updates**: All GitHub URLs need to be updated from `xbigo/ape-template` to `xbigo/ape-template`
 
-2. **Image Names**: Docker image names need to be updated from `ape2-linux` etc. to `ape-template-linux`
+2. **Image Names**: Docker image names need to be updated from `ape-template-linux` etc. to `ape-template-linux`
 
 3. **Build Artifacts**: Build artifact names in CI/CD need to be updated
 
 4. **Variable Prefixes**: All CMake variables from `APE2_*` to `APE_TEMPLATE_*`
 
-5. **Library Names**: All libraries from `ape2_*` to `ape_template_*`
+5. **Library Names**: All libraries from `ape-template_*` to `ape_template_*`
 
-6. **Namespaces**: All C++ namespaces from `ape2::` to `ape_template::`
+6. **Namespaces**: All C++ namespaces from `ape-template::` to `ape_template::`
 
 ## ✅ Verification Checklist
 
 After completing all changes, perform the following checks:
 
 ```bash
-# 1. Search for remaining ape2 references (should have no results or only in historical documentation)
-grep -r "ape2" --exclude-dir=.git --exclude-dir=build* .
+# 1. Search for remaining ape-template references (should have no results or only in historical documentation)
+grep -r "ape-template" --exclude-dir=.git --exclude-dir=build* .
 
 # 2. Search for remaining APE2 references
 grep -r "APE2" --exclude-dir=.git --exclude-dir=build* .
@@ -177,7 +177,7 @@ docker images | grep ape-template
 5. **Commit Changes** ⏳
    ```bash
    git add .
-   git commit -m "Rename project from ape2 to ape-template"
+   git commit -m "Rename project from ape-template to ape-template"
    ```
 
 ## 🎯 Final Goal
