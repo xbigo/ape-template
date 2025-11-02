@@ -25,14 +25,14 @@
 - 代码将采用C++23标准
 - 启用尽可能多的检查选项，报告不符合标准的代码。
 - 启用clang-tidy 和clang-format。
-- 支持Debug，Relase 等多种构建类型， 但所有构建都要生成分离的调试符号文件。
+- 支持Debug，Release 等多种构建类型， 但所有构建都要生成分离的调试符号文件。
 - 支持FastDebug 构建类型，该配置和Debug相同， 但是优化级别为O1
 - 支持SlowRelease 构建类型。该配置和Release相同，但是优化级别为O0
 - 启用C++ module
 
 
 编译支持的参数要求如下
-- 可开启各种Sanitizer， 包裹但不限于Memory，Address。 默认关闭
+- 可开启各种Sanitizer， 包括但不限于Memory，Address。 默认关闭
 - 允许Strip 生成的共享库中的符号。 默认关闭。
 - 支持分布式编译，默认关闭。
 
