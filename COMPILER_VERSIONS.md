@@ -1,46 +1,46 @@
 # Compiler Version Requirements
 
-本文档详细说明了ape2项目对编译器版本的要求。
+This document details the compiler version requirements for the ape-template project.
 
-## 📋 最低版本要求
+## 📋 Minimum Version Requirements
 
-为了充分利用C++23的新特性，特别是完整的C++模块支持，本项目要求以下编译器版本：
+To fully leverage C++23 features, especially complete C++ module support, this project requires the following compiler versions:
 
-| 编译器 | 最低版本 | 对应IDE/发行版 | 说明 |
-|--------|---------|---------------|------|
-| **Clang** | 19.1 | LLVM 19.1+ | 完整的C++23和模块支持 |
-| **GCC** | 15.2 | GCC 15.2+ | 完整的C++23和模块支持 |
-| **MSVC** | 19.42 | Visual Studio 2022 17.12+ | 完整的C++23和模块支持 |
+| Compiler | Minimum Version | Corresponding IDE/Distribution | Notes |
+|----------|----------------|-------------------------------|-------|
+| **Clang** | 19.1 | LLVM 19.1+ | Full C++23 and module support |
+| **GCC** | 15.2 | GCC 15.2+ | Full C++23 and module support |
+| **MSVC** | 19.42 | Visual Studio 2022 17.12+ | Full C++23 and module support |
 
-## 🎯 为什么选择这些版本？
+## 🎯 Why These Versions?
 
 ### Clang 19.1+
-- ✅ 完整的C++23标准支持
-- ✅ 稳定的C++模块实现
-- ✅ 改进的标准库模块支持
-- ✅ 更好的诊断信息和错误提示
-- ✅ 优化的模块编译性能
+- ✅ Complete C++23 standard support
+- ✅ Stable C++ module implementation
+- ✅ Improved standard library module support
+- ✅ Better diagnostics and error messages
+- ✅ Optimized module compilation performance
 
 ### GCC 15.2+
-- ✅ 完整的C++23标准支持
-- ✅ 生产级的C++模块实现
-- ✅ 标准库模块完全支持
-- ✅ 改进的模块编译速度
-- ✅ 更好的ABI稳定性
+- ✅ Complete C++23 standard support
+- ✅ Production-grade C++ module implementation
+- ✅ Full standard library module support
+- ✅ Improved module compilation speed
+- ✅ Better ABI stability
 
 ### MSVC 19.42+ (Visual Studio 2022 17.12+)
-- ✅ 完整的C++23标准支持
-- ✅ 稳定的C++模块实现
-- ✅ 标准库模块完全支持
-- ✅ 与Visual Studio IDE深度集成
-- ✅ 优秀的调试体验
+- ✅ Complete C++23 standard support
+- ✅ Stable C++ module implementation
+- ✅ Full standard library module support
+- ✅ Deep integration with Visual Studio IDE
+- ✅ Excellent debugging experience
 
-## 🔍 特性对比
+## 🔍 Feature Comparison
 
-### C++23 特性支持
+### C++23 Feature Support
 
-| 特性 | Clang 19.1 | GCC 15.2 | MSVC 19.42 |
-|------|-----------|---------|-----------|
+| Feature | Clang 19.1 | GCC 15.2 | MSVC 19.42 |
+|---------|-----------|---------|-----------|
 | Modules | ✅ | ✅ | ✅ |
 | `import std` | ✅ | ✅ | ✅ |
 | Deducing this | ✅ | ✅ | ✅ |
@@ -52,35 +52,35 @@
 | `std::expected` | ✅ | ✅ | ✅ |
 | `std::mdspan` | ✅ | ✅ | ✅ |
 
-## 📦 获取编译器
+## 📦 Obtaining Compilers
 
 ### Clang 19.1+
 
 **Linux (Ubuntu/Debian):**
 ```bash
-# 添加LLVM仓库
+# Add LLVM repository
 wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
 sudo add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-19 main"
 
-# 安装
+# Install
 sudo apt-get update
 sudo apt-get install clang-19 clang++-19
 ```
 
 **macOS:**
 ```bash
-# 使用Homebrew
+# Using Homebrew
 brew install llvm@19
 ```
 
 **Windows:**
-- 下载并安装 [LLVM 19.1+](https://releases.llvm.org/)
+- Download and install [LLVM 19.1+](https://releases.llvm.org/)
 
 ### GCC 15.2+
 
 **Linux (Ubuntu/Debian):**
 ```bash
-# 使用测试仓库或从源码编译
+# Using test repository or compile from source
 sudo add-apt-repository ppa:ubuntu-toolchain-r/test
 sudo apt-get update
 sudo apt-get install gcc-15 g++-15
@@ -88,130 +88,130 @@ sudo apt-get install gcc-15 g++-15
 
 **macOS:**
 ```bash
-# GCC不是macOS的首选，建议使用Clang
+# GCC is not the preferred compiler on macOS, use Clang instead
 brew install gcc@15
 ```
 
 **Windows:**
-- 使用 [MinGW-w64](https://www.mingw-w64.org/) 或 [MSYS2](https://www.msys2.org/)
+- Use [MinGW-w64](https://www.mingw-w64.org/) or [MSYS2](https://www.msys2.org/)
 
 ### MSVC 19.42+
 
 **Windows:**
-- 安装 [Visual Studio 2022 17.12+](https://visualstudio.microsoft.com/)
-- 或者安装 [Visual Studio Build Tools 2022](https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022)
+- Install [Visual Studio 2022 17.12+](https://visualstudio.microsoft.com/)
+- Or install [Visual Studio Build Tools 2022](https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022)
 
-选择工作负载：
-- "使用C++的桌面开发"
-- 确保选择最新的MSVC工具集
+Select workloads:
+- "Desktop development with C++"
+- Ensure the latest MSVC toolset is selected
 
-## 🔄 版本检查
+## 🔄 Version Checking
 
-项目会在配置时自动检查编译器版本：
+The project automatically checks compiler versions during configuration:
 
 ```bash
 cmake -B build -G Ninja
 ```
 
-如果编译器版本不满足要求，会显示类似错误：
+If the compiler version doesn't meet requirements, an error will be displayed:
 
 ```
 CMake Error: Clang 19.1+ required, but found 18.0.0
 ```
 
-## 🐳 Docker环境
+## 🐳 Docker Environment
 
-如果本地编译器版本不满足要求，可以使用预配置的Docker环境：
+If your local compiler version doesn't meet requirements, you can use pre-configured Docker environments:
 
 ```bash
-# 使用Docker构建（包含正确版本的编译器）
+# Build using Docker (includes correct compiler versions)
 bash scripts/docker-build.sh -p linux -t Release
 ```
 
-Docker镜像包含：
-- Clang 19.1+ (Linux容器)
-- GCC 15.2+ (Linux容器)
-- 所有必要的构建工具
+Docker images include:
+- Clang 19.1+ (Linux containers)
+- GCC 15.2+ (Linux containers)
+- All necessary build tools
 
-## ⚠️ 兼容性说明
+## ⚠️ Compatibility Notes
 
-### 不支持的旧版本
+### Unsupported Older Versions
 
-以下版本**不再支持**，因为缺少完整的C++模块实现：
+The following versions are **no longer supported** due to lack of complete C++ module implementation:
 
-❌ Clang 18.x 及更早版本
-❌ GCC 14.x 及更早版本
-❌ MSVC 19.41 及更早版本
+❌ Clang 18.x and earlier
+❌ GCC 14.x and earlier
+❌ MSVC 19.41 and earlier
 
-### 标准库要求
+### Standard Library Requirements
 
-- **Clang**: 使用 libc++ 或 libstdc++（推荐 libc++ 17+）
-- **GCC**: 使用 libstdc++ 15+
-- **MSVC**: 使用内置的标准库（自动匹配）
+- **Clang**: Use libc++ or libstdc++ (libc++ 17+ recommended)
+- **GCC**: Use libstdc++ 15+
+- **MSVC**: Use built-in standard library (automatically matched)
 
-## 📊 性能建议
+## 📊 Performance Recommendations
 
-### 模块编译
+### Module Compilation
 
-C++模块的编译可能比传统头文件慢，但会带来：
-- 更快的增量编译
-- 更好的封装性
-- 改进的编译器诊断
+C++ module compilation may be slower than traditional headers, but provides:
+- Faster incremental compilation
+- Better encapsulation
+- Improved compiler diagnostics
 
-### 优化建议
+### Optimization Recommendations
 
-1. **使用预编译模块接口**
+1. **Use precompiled module interfaces**
    ```bash
-   cmake -B build -DAPE2_PRECOMPILE_MODULES=ON
+   cmake -B build -DAPE_TEMPLATE_PRECOMPILE_MODULES=ON
    ```
 
-2. **启用并行编译**
+2. **Enable parallel compilation**
    ```bash
    cmake --build build --parallel $(nproc)
    ```
 
-3. **使用ccache加速**
+3. **Use ccache for acceleration**
    ```bash
-   cmake -B build -DAPE2_ENABLE_DISTRIBUTED_BUILD=ON
+   cmake -B build -DAPE_TEMPLATE_ENABLE_DISTRIBUTED_BUILD=ON
    ```
 
-## 🔧 故障排除
+## 🔧 Troubleshooting
 
-### 问题：找不到指定版本的编译器
+### Issue: Cannot find specified compiler version
 
-**解决方案：**
+**Solution:**
 ```bash
-# 明确指定编译器路径
+# Explicitly specify compiler path
 cmake -B build \
   -DCMAKE_C_COMPILER=/usr/bin/clang-19 \
   -DCMAKE_CXX_COMPILER=/usr/bin/clang++-19
 ```
 
-### 问题：模块支持未启用
+### Issue: Module support not enabled
 
-**解决方案：**
+**Solution:**
 ```bash
-# 确保启用了模块支持
-cmake -B build -DAPE2_USE_MODULES=ON
+# Ensure module support is enabled
+cmake -B build -DAPE_TEMPLATE_USE_MODULES=ON
 ```
 
-### 问题：标准库模块找不到
+### Issue: Cannot find standard library modules
 
-**解决方案：**
+**Solution:**
 
-对于Clang：
+For Clang:
 ```bash
-# 确保使用正确的标准库
+# Ensure correct standard library is used
 cmake -B build -DCMAKE_CXX_FLAGS="-stdlib=libc++"
 ```
 
-对于GCC：
+For GCC:
 ```bash
-# 确保使用正确的标准库路径
+# Ensure correct standard library path
 export LD_LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/15:$LD_LIBRARY_PATH
 ```
 
-## 📚 相关资源
+## 📚 Related Resources
 
 - [Clang Release Notes](https://releases.llvm.org/)
 - [GCC Release Notes](https://gcc.gnu.org/releases.html)
@@ -219,13 +219,13 @@ export LD_LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/15:$LD_LIBRARY_PATH
 - [C++23 Compiler Support](https://en.cppreference.com/w/cpp/compiler_support/23)
 - [C++ Modules Documentation](https://en.cppreference.com/w/cpp/language/modules)
 
-## 🔄 更新历史
+## 🔄 Update History
 
-| 日期 | 版本要求 | 说明 |
-|------|---------|------|
-| 2025-11-01 | Clang 19.1+, GCC 15.2+, MSVC 19.42+ | 初始版本，完整的C++模块支持 |
+| Date | Version Requirements | Notes |
+|------|---------------------|-------|
+| 2025-11-01 | Clang 19.1+, GCC 15.2+, MSVC 19.42+ | Initial version with full C++ module support |
 
 ---
 
-**注意**: 这些版本要求会随着编译器的发展和C++标准的演进而更新。
+**Note**: These version requirements will be updated as compilers evolve and C++ standards progress.
 
