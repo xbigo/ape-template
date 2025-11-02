@@ -1,0 +1,37 @@
+{
+    "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+    "name": "ape2",
+    "version-string": "0.1.0",
+    "description": "A comprehensive C++ library collection",
+    "homepage": "https://github.com/xbigo/ape2",
+    "license": "MIT",
+    "dependencies": [
+        {
+            "name": "gtest",
+            "version>=": "1.14.0"
+        },
+        {
+            "name": "benchmark",
+            "version>=": "1.8.3"
+        }
+    ],
+    "builtin-baseline": "latest",
+    "features": {
+        "tests": {
+            "description": "Build tests",
+            "dependencies": [
+                "gtest"
+            ]
+        },
+        "benchmarks": {
+            "description": "Build benchmarks",
+            "dependencies": [
+                "benchmark"
+            ]
+        },
+        "docs": {
+            "description": "Build documentation",
+            "dependencies": []
+        }
+    }
+}

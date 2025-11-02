@@ -1,0 +1,142 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  # Create release
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+
+    steps:
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+
+  # Build and upload Linux release
+  release-linux:
+    name: Release Linux
+    needs: create-release
+    runs-on: ubuntu-24.10
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y ninja-build gcc-15 g++-15
+
+    - name: Setup CMake
+      uses: jwlawson/actions-setup-cmake@v1
+      with:
+        cmake-version: '3.28.x'
+
+    - name: Configure and Build
+      run: |
+        cmake -B build \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_C_COMPILER=gcc-15 \
+          -DCMAKE_CXX_COMPILER=g++-15 \
+          -G Ninja
+        cmake --build build --parallel
+
+    - name: Package
+      run: |
+        cd build
+        cpack -G TGZ
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create-release.outputs.upload_url }}
+        asset_path: ./build/ape2-*-Linux.tar.gz
+        asset_name: ape2-${{ github.ref_name }}-linux-x86_64.tar.gz
+        asset_content_type: application/gzip
+
+  # Build and upload Windows release
+  release-windows:
+    name: Release Windows
+    needs: create-release
+    runs-on: windows-2022
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup MSVC
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        vsversion: '2022'
+
+    - name: Setup CMake
+      uses: jwlawson/actions-setup-cmake@v1
+      with:
+        cmake-version: '3.28.x'
+
+    - name: Configure and Build
+      run: |
+        cmake -B build -DCMAKE_BUILD_TYPE=Release -G Ninja
+        cmake --build build --parallel
+
+    - name: Package
+      run: |
+        cd build
+        cpack -G ZIP
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create-release.outputs.upload_url }}
+        asset_path: ./build/ape2-*-win64.zip
+        asset_name: ape2-${{ github.ref_name }}-windows-x86_64.zip
+        asset_content_type: application/zip
+
+  # Build and upload macOS release
+  release-macos:
+    name: Release macOS
+    needs: create-release
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: brew install ninja cmake
+
+    - name: Configure and Build
+      run: |
+        cmake -B build -DCMAKE_BUILD_TYPE=Release -G Ninja
+        cmake --build build --parallel
+
+    - name: Package
+      run: |
+        cd build
+        cpack -G TGZ
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create-release.outputs.upload_url }}
+        asset_path: ./build/ape2-*-Darwin.tar.gz
+        asset_name: ape2-${{ github.ref_name }}-macos-universal.tar.gz
+        asset_content_type: application/gzip
+

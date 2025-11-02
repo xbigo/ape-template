@@ -1,0 +1,23 @@
+[requires]
+# Add your dependencies here
+# Example:
+# boost/1.82.0
+# zlib/1.2.13
+# sqlite3/3.42.0
+
+[generators]
+CMakeDeps
+CMakeToolchain
+
+[options]
+# Set options for dependencies
+# Example:
+# boost:shared=False
+# zlib:shared=False
+
+[imports]
+# Copy binaries to build folder
+bin, *.dll -> ./bin
+lib, *.dylib* -> ./lib
+lib, *.so* -> ./lib
+

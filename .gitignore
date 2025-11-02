@@ -1,0 +1,123 @@
+# Build directories
+build/
+build-*/
+cmake-build-*/
+out/
+bin/
+lib/
+dist/
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+compile_commands.json
+CTestTestfile.cmake
+*.vcxproj*
+*.sln
+
+# IDE specific
+.vs/
+.vscode/.cache/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Compiled Object files
+*.o
+*.obj
+*.lo
+*.slo
+*.ko
+*.elf
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.a
+*.lib
+*.lai
+*.la
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Debug symbols
+*.pdb
+*.dSYM/
+*.dbg
+*.sym
+
+# Coverage
+*.gcda
+*.gcno
+*.gcov
+coverage/
+*.info
+
+# Sanitizer logs
+*.san
+
+# Package managers
+conan/
+vcpkg_installed/
+_deps/
+
+# Documentation
+docs/html/
+docs/latex/
+docs/xml/
+
+# Test results
+Testing/
+test_results/
+*.log
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Python (for scripts)
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+
+# Android
+*.apk
+*.aab
+local.properties
+
+# iOS
+*.ipa
+*.dSYM.zip
+xcuserdata/
+DerivedData/
+
+# Emscripten
+*.wasm
+*.js.mem
+
+# Secrets (should never be committed)
+secrets/
+*.key
+*.pem
+*.cert
+!docker/secrets/.gitkeep
+

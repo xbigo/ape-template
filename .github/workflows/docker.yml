@@ -1,0 +1,124 @@
+name: Docker Builds
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  # Linux Docker build
+  docker-linux:
+    name: Docker Linux Build
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build Docker image
+      run: |
+        docker build -t ape2-linux:latest docker/linux
+
+    - name: Build project in Docker
+      run: |
+        docker run --rm \
+          -v ${{ github.workspace }}:/workspace \
+          -v ${{ github.workspace }}/build-docker:/build \
+          -w /workspace \
+          ape2-linux:latest \
+          bash -c "cmake -B /build -S /workspace -G Ninja -DCMAKE_BUILD_TYPE=Release && cmake --build /build --parallel"
+
+    - name: Run tests in Docker
+      run: |
+        docker run --rm \
+          -v ${{ github.workspace }}:/workspace \
+          -v ${{ github.workspace }}/build-docker:/build \
+          -w /build \
+          ape2-linux:latest \
+          bash -c "ctest --output-on-failure"
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: docker-linux-artifacts
+        path: |
+          build-docker/lib/
+          build-docker/bin/
+
+  # Android NDK Docker build
+  docker-android:
+    name: Docker Android Build
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build Docker image
+      run: |
+        docker build -t ape2-android:latest docker/android
+
+    - name: Build project in Docker (arm64-v8a)
+      run: |
+        docker run --rm \
+          -v ${{ github.workspace }}:/workspace \
+          -v ${{ github.workspace }}/build-android:/build \
+          -w /workspace \
+          ape2-android:latest \
+          bash -c "cmake -B /build -S /workspace \
+            -DCMAKE_TOOLCHAIN_FILE=/opt/android-sdk/ndk/26.1.10909125/build/cmake/android.toolchain.cmake \
+            -DANDROID_ABI=arm64-v8a \
+            -DANDROID_PLATFORM=android-24 \
+            -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DAPE2_BUILD_TESTS=OFF && \
+            cmake --build /build --parallel"
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: docker-android-artifacts
+        path: |
+          build-android/lib/
+          build-android/bin/
+
+  # WebAssembly Docker build
+  docker-wasm:
+    name: Docker WebAssembly Build
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build Docker image
+      run: |
+        docker build -t ape2-wasm:latest docker/webassembly
+
+    - name: Build project in Docker
+      run: |
+        docker run --rm \
+          -v ${{ github.workspace }}:/workspace \
+          -v ${{ github.workspace }}/build-wasm:/build \
+          -w /workspace \
+          ape2-wasm:latest \
+          bash -c "source /opt/emsdk/emsdk_env.sh && \
+            emcmake cmake -B /build -S /workspace -G Ninja -DCMAKE_BUILD_TYPE=Release -DAPE2_BUILD_TESTS=OFF && \
+            cmake --build /build --parallel"
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: docker-wasm-artifacts
+        path: |
+          build-wasm/**/*.wasm
+          build-wasm/**/*.js
+

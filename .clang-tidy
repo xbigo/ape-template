@@ -1,0 +1,137 @@
+---
+# .clang-tidy configuration for ape2 project
+# Comprehensive checks for C++23 code quality and safety
+
+Checks: >
+  -*,
+  bugprone-*,
+  -bugprone-easily-swappable-parameters,
+  -bugprone-exception-escape,
+  cert-*,
+  -cert-err58-cpp,
+  clang-analyzer-*,
+  concurrency-*,
+  cppcoreguidelines-*,
+  -cppcoreguidelines-avoid-magic-numbers,
+  -cppcoreguidelines-avoid-c-arrays,
+  -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
+  -cppcoreguidelines-pro-bounds-constant-array-index,
+  -cppcoreguidelines-pro-bounds-pointer-arithmetic,
+  google-*,
+  -google-runtime-references,
+  hicpp-*,
+  -hicpp-no-array-decay,
+  -hicpp-avoid-c-arrays,
+  misc-*,
+  -misc-non-private-member-variables-in-classes,
+  -misc-no-recursion,
+  modernize-*,
+  -modernize-use-trailing-return-type,
+  performance-*,
+  readability-*,
+  -readability-magic-numbers,
+  -readability-identifier-length,
+  -readability-function-cognitive-complexity,
+
+# Treat warnings as errors
+WarningsAsErrors: ''
+
+# Header filter - check all project headers
+HeaderFilterRegex: '.*\/ape2\/.*'
+
+# Analysis options
+AnalyzeTemporaryDtors: true
+
+# Check options
+CheckOptions:
+  # Naming conventions
+  - key:             readability-identifier-naming.NamespaceCase
+    value:           lower_case
+  - key:             readability-identifier-naming.ClassCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.StructCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.EnumCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.FunctionCase
+    value:           lower_case
+  - key:             readability-identifier-naming.VariableCase
+    value:           lower_case
+  - key:             readability-identifier-naming.ParameterCase
+    value:           lower_case
+  - key:             readability-identifier-naming.MemberCase
+    value:           lower_case
+  - key:             readability-identifier-naming.PrivateMemberSuffix
+    value:           '_'
+  - key:             readability-identifier-naming.ProtectedMemberSuffix
+    value:           '_'
+  - key:             readability-identifier-naming.ConstantCase
+    value:           UPPER_CASE
+  - key:             readability-identifier-naming.ConstexprVariableCase
+    value:           UPPER_CASE
+  - key:             readability-identifier-naming.GlobalConstantCase
+    value:           UPPER_CASE
+  - key:             readability-identifier-naming.StaticConstantCase
+    value:           UPPER_CASE
+  - key:             readability-identifier-naming.TemplateParameterCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.TypeAliasCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.TypedefCase
+    value:           CamelCase
+
+  # Line length
+  - key:             readability-function-size.LineThreshold
+    value:           '200'
+  - key:             readability-function-size.StatementThreshold
+    value:           '200'
+  - key:             readability-function-size.BranchThreshold
+    value:           '20'
+  - key:             readability-function-size.ParameterThreshold
+    value:           '8'
+
+  # Modern C++ features
+  - key:             modernize-use-nullptr.NullMacros
+    value:           'NULL'
+  - key:             modernize-loop-convert.MaxCopySize
+    value:           '64'
+  - key:             modernize-loop-convert.MinConfidence
+    value:           'reasonable'
+  - key:             modernize-use-auto.MinTypeNameLength
+    value:           '5'
+
+  # Performance
+  - key:             performance-move-const-arg.CheckTriviallyCopyableMove
+    value:           'true'
+  - key:             performance-unnecessary-copy-initialization.AllowedTypes
+    value:           ''
+
+  # Readability
+  - key:             readability-braces-around-statements.ShortStatementLines
+    value:           '2'
+  - key:             readability-simplify-boolean-expr.ChainedConditionalReturn
+    value:           'true'
+  - key:             readability-simplify-boolean-expr.ChainedConditionalAssignment
+    value:           'true'
+
+  # Misc
+  - key:             misc-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic
+    value:           'true'
+
+  # Bugprone
+  - key:             bugprone-assert-side-effect.AssertMacros
+    value:           'assert,ASSERT,EXPECT_TRUE,ASSERT_TRUE'
+  - key:             bugprone-string-constructor.WarnOnLargeLength
+    value:           'true'
+  - key:             bugprone-string-constructor.LargeLengthThreshold
+    value:           '8388608'
+
+  # Core Guidelines
+  - key:             cppcoreguidelines-special-member-functions.AllowSoleDefaultDtor
+    value:           'true'
+  - key:             cppcoreguidelines-special-member-functions.AllowMissingMoveFunctions
+    value:           'false'
+  - key:             cppcoreguidelines-explicit-virtual-functions.IgnoreDestructors
+    value:           'true'
+---
+

@@ -1,0 +1,300 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  # Linux builds with different compilers
+  linux:
+    name: Linux (${{ matrix.compiler }}, ${{ matrix.build_type }})
+    runs-on: ubuntu-24.10
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [gcc-15, clang-19]
+        build_type: [Debug, Release]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          ninja-build \
+          gcc-15 g++-15 \
+          clang-19 clang-tidy-19 clang-format-19
+
+    - name: Setup CMake
+      uses: jwlawson/actions-setup-cmake@v1
+      with:
+        cmake-version: '3.28.x'
+
+    - name: Configure CMake (GCC)
+      if: matrix.compiler == 'gcc-15'
+      run: |
+        cmake -B build \
+          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+          -DCMAKE_C_COMPILER=gcc-15 \
+          -DCMAKE_CXX_COMPILER=g++-15 \
+          -G Ninja
+
+    - name: Configure CMake (Clang)
+      if: matrix.compiler == 'clang-19'
+      run: |
+        cmake -B build \
+          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+          -DCMAKE_C_COMPILER=clang-19 \
+          -DCMAKE_CXX_COMPILER=clang++-19 \
+          -G Ninja
+
+    - name: Build
+      run: cmake --build build --parallel
+
+    - name: Run tests
+      run: |
+        cd build
+        ctest --output-on-failure
+
+    - name: Upload artifacts
+      if: matrix.build_type == 'Release'
+      uses: actions/upload-artifact@v3
+      with:
+        name: linux-${{ matrix.compiler }}-artifacts
+        path: |
+          build/lib/
+          build/bin/
+
+  # Windows build
+  windows:
+    name: Windows (MSVC, ${{ matrix.build_type }})
+    runs-on: windows-2022
+    strategy:
+      fail-fast: false
+      matrix:
+        build_type: [Debug, Release]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup MSVC
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        vsversion: '2022'
+
+    - name: Setup CMake
+      uses: jwlawson/actions-setup-cmake@v1
+      with:
+        cmake-version: '3.28.x'
+
+    - name: Configure CMake
+      run: |
+        cmake -B build `
+          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} `
+          -G Ninja
+
+    - name: Build
+      run: cmake --build build --parallel
+
+    - name: Run tests
+      run: |
+        cd build
+        ctest --output-on-failure
+
+    - name: Upload artifacts
+      if: matrix.build_type == 'Release'
+      uses: actions/upload-artifact@v3
+      with:
+        name: windows-msvc-artifacts
+        path: |
+          build/lib/
+          build/bin/
+
+  # macOS build
+  macos:
+    name: macOS (Clang, ${{ matrix.build_type }})
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        build_type: [Debug, Release]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: |
+        brew install ninja cmake
+
+    - name: Configure CMake
+      run: |
+        cmake -B build \
+          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+          -G Ninja
+
+    - name: Build
+      run: cmake --build build --parallel
+
+    - name: Run tests
+      run: |
+        cd build
+        ctest --output-on-failure
+
+    - name: Upload artifacts
+      if: matrix.build_type == 'Release'
+      uses: actions/upload-artifact@v3
+      with:
+        name: macos-clang-artifacts
+        path: |
+          build/lib/
+          build/bin/
+
+  # Sanitizer builds
+  sanitizers:
+    name: Sanitizers (${{ matrix.sanitizer }})
+    runs-on: ubuntu-24.10
+    strategy:
+      fail-fast: false
+      matrix:
+        sanitizer: [address, undefined, thread]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y ninja-build clang-19
+
+    - name: Setup CMake
+      uses: jwlawson/actions-setup-cmake@v1
+      with:
+        cmake-version: '3.28.x'
+
+    - name: Configure CMake
+      run: |
+        cmake -B build \
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DCMAKE_C_COMPILER=clang-19 \
+          -DCMAKE_CXX_COMPILER=clang++-19 \
+          -DAPE2_ENABLE_SANITIZERS=ON \
+          -DAPE2_SANITIZER_TYPE=${{ matrix.sanitizer }} \
+          -G Ninja
+
+    - name: Build
+      run: cmake --build build --parallel
+
+    - name: Run tests
+      run: |
+        cd build
+        ctest --output-on-failure
+
+  # Code coverage
+  coverage:
+    name: Code Coverage
+    runs-on: ubuntu-24.10
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          ninja-build \
+          gcc-15 g++-15 \
+          lcov
+
+    - name: Setup CMake
+      uses: jwlawson/actions-setup-cmake@v1
+      with:
+        cmake-version: '3.28.x'
+
+    - name: Configure CMake
+      run: |
+        cmake -B build \
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DCMAKE_C_COMPILER=gcc-15 \
+          -DCMAKE_CXX_COMPILER=g++-15 \
+          -DAPE2_ENABLE_COVERAGE=ON \
+          -G Ninja
+
+    - name: Build
+      run: cmake --build build --parallel
+
+    - name: Run tests
+      run: |
+        cd build
+        ctest --output-on-failure
+
+    - name: Generate coverage report
+      run: |
+        cd build
+        lcov --directory . --capture --output-file coverage.info
+        lcov --remove coverage.info '/usr/*' '*/test/*' '*/tests/*' '_deps/*' --output-file coverage.info.cleaned
+        lcov --list coverage.info.cleaned
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./build/coverage.info.cleaned
+        fail_ci_if_error: false
+
+  # Code formatting check
+  format:
+    name: Code Formatting
+    runs-on: ubuntu-24.10
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install clang-format
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y clang-format-19
+
+    - name: Check formatting
+      run: |
+        find src include tests -type f \( -name "*.cpp" -o -name "*.hpp" -o -name "*.h" \) \
+          -exec clang-format-19 --dry-run --Werror {} +
+
+  # Static analysis
+  static-analysis:
+    name: Static Analysis
+    runs-on: ubuntu-24.10
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          ninja-build \
+          clang-19 \
+          clang-tidy-19
+
+    - name: Setup CMake
+      uses: jwlawson/actions-setup-cmake@v1
+      with:
+        cmake-version: '3.28.x'
+
+    - name: Configure CMake
+      run: |
+        cmake -B build \
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DCMAKE_C_COMPILER=clang-19 \
+          -DCMAKE_CXX_COMPILER=clang++-19 \
+          -DAPE2_ENABLE_CLANG_TIDY=ON \
+          -G Ninja
+
+    - name: Build (with clang-tidy)
+      run: cmake --build build --parallel
+
