@@ -39,9 +39,6 @@ WarningsAsErrors: ''
 # Header filter - check all project headers
 HeaderFilterRegex: '.*\/ape-template\/.*'
 
-# Analysis options
-AnalyzeTemporaryDtors: true
-
 # Check options
 CheckOptions:
   # Naming conventions

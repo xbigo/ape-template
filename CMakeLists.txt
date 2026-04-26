@@ -120,7 +120,17 @@ include(cmake/modules/ThirdParty.cmake)
 if(APE_TEMPLATE_ENABLE_CLANG_TIDY)
     find_program(CLANG_TIDY_EXE NAMES "clang-tidy")
     if(CLANG_TIDY_EXE)
-        set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE}")
+        set(_clang_tidy_args "${CLANG_TIDY_EXE}")
+        if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND APE_TEMPLATE_USE_MODULES)
+            # When GCC compiles with C++ modules enabled, CMake injects GCC-specific
+            # module scanning flags (-fmodule-mapper, -fdeps-format=p1689r5,
+            # -fmodules-ts) into every compile command. clang-tidy's Clang front-end
+            # does not recognise these GCC-only flags and exits with
+            # "error: unknown argument". -Wno-unknown-argument silences those
+            # diagnostics so clang-tidy can still analyse the C++ source normally.
+            list(APPEND _clang_tidy_args "--extra-arg=-Wno-unknown-argument")
+        endif()
+        set(CMAKE_CXX_CLANG_TIDY "${_clang_tidy_args}")
         message(STATUS "clang-tidy found: ${CLANG_TIDY_EXE}")
     else()
         message(WARNING "clang-tidy not found")
