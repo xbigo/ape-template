@@ -1,0 +1,551 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": { "major": 3, "minor": 28, "patch": 0 },
+
+  "configurePresets": [
+
+    {
+      "name": "_base",
+      "hidden": true,
+      "description": "Shared root: build dir = build/<presetName>, export compile_commands.json",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+      }
+    },
+    {
+      "name": "_ninja",
+      "hidden": true,
+      "description": "Ninja generator",
+      "inherits": ["_base"],
+      "generator": "Ninja"
+    },
+
+    { "name": "_debug",       "hidden": true, "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug"       } },
+    { "name": "_release",     "hidden": true, "cacheVariables": { "CMAKE_BUILD_TYPE": "Release"     } },
+    { "name": "_fastdebug",   "hidden": true, "cacheVariables": { "CMAKE_BUILD_TYPE": "FastDebug"   } },
+    { "name": "_minsize",     "hidden": true, "cacheVariables": { "CMAKE_BUILD_TYPE": "MinSizeRel"  } },
+    { "name": "_slowrelease", "hidden": true, "cacheVariables": { "CMAKE_BUILD_TYPE": "SlowRelease" } },
+
+    {
+      "name": "_gcc",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_C_COMPILER":   "gcc-15",
+        "CMAKE_CXX_COMPILER": "g++-15"
+      }
+    },
+    {
+      "name": "_clang",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_C_COMPILER":   "clang-19",
+        "CMAKE_CXX_COMPILER": "clang++-19"
+      }
+    },
+    {
+      "name": "_windows-msvc",
+      "hidden": true,
+      "description": "x64 MSVC; toolchain comes from VS Developer environment (external strategy)",
+      "architecture": { "value": "x64", "strategy": "external" }
+    },
+
+    {
+      "name": "_no-tidy",
+      "hidden": true,
+      "cacheVariables": { "APE_TEMPLATE_ENABLE_CLANG_TIDY": "OFF" }
+    },
+    {
+      "name": "_no-tests",
+      "hidden": true,
+      "cacheVariables": {
+        "APE_TEMPLATE_BUILD_TESTS":      "OFF",
+        "APE_TEMPLATE_BUILD_BENCHMARKS": "OFF"
+      }
+    },
+
+    {
+      "name": "_asan",
+      "hidden": true,
+      "inherits": ["_no-tidy"],
+      "cacheVariables": {
+        "APE_TEMPLATE_ENABLE_SANITIZERS": "ON",
+        "APE_TEMPLATE_SANITIZER_TYPE":    "address"
+      }
+    },
+    {
+      "name": "_msan",
+      "hidden": true,
+      "inherits": ["_no-tidy"],
+      "cacheVariables": {
+        "APE_TEMPLATE_ENABLE_SANITIZERS": "ON",
+        "APE_TEMPLATE_SANITIZER_TYPE":    "memory"
+      }
+    },
+    {
+      "name": "_tsan",
+      "hidden": true,
+      "inherits": ["_no-tidy"],
+      "cacheVariables": {
+        "APE_TEMPLATE_ENABLE_SANITIZERS": "ON",
+        "APE_TEMPLATE_SANITIZER_TYPE":    "thread"
+      }
+    },
+    {
+      "name": "_ubsan",
+      "hidden": true,
+      "inherits": ["_no-tidy"],
+      "cacheVariables": {
+        "APE_TEMPLATE_ENABLE_SANITIZERS": "ON",
+        "APE_TEMPLATE_SANITIZER_TYPE":    "undefined"
+      }
+    },
+    {
+      "name": "_lsan",
+      "hidden": true,
+      "inherits": ["_no-tidy"],
+      "cacheVariables": {
+        "APE_TEMPLATE_ENABLE_SANITIZERS": "ON",
+        "APE_TEMPLATE_SANITIZER_TYPE":    "leak"
+      }
+    },
+    {
+      "name": "_coverage",
+      "hidden": true,
+      "inherits": ["_no-tidy"],
+      "cacheVariables": { "APE_TEMPLATE_ENABLE_COVERAGE": "ON" }
+    },
+    {
+      "name": "_fuzz",
+      "hidden": true,
+      "inherits": ["_no-tidy"],
+      "cacheVariables": {
+        "APE_TEMPLATE_BUILD_FUZZ_TESTS":       "ON",
+        "APE_TEMPLATE_BUILD_UNIT_TESTS":       "OFF",
+        "APE_TEMPLATE_BUILD_REGRESSION_TESTS": "OFF",
+        "APE_TEMPLATE_BUILD_BENCHMARKS":       "OFF"
+      }
+    },
+
+    {
+      "name": "windows-msvc-debug",
+      "displayName": "Windows · MSVC · Debug",
+      "description": "Full debug info; unit+regression tests; clang-tidy on.",
+      "inherits": ["_ninja", "_windows-msvc", "_debug"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" }
+    },
+    {
+      "name": "windows-msvc-release",
+      "displayName": "Windows · MSVC · Release",
+      "description": "Optimised; PDB separated to build/symbols/ (/Zi + /DEBUG).",
+      "inherits": ["_ninja", "_windows-msvc", "_release"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" }
+    },
+    {
+      "name": "windows-msvc-fastdebug",
+      "displayName": "Windows · MSVC · FastDebug",
+      "description": "/O1 + full debug info — faster iteration than Debug.",
+      "inherits": ["_ninja", "_windows-msvc", "_fastdebug"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" }
+    },
+    {
+      "name": "windows-msvc-minsize",
+      "displayName": "Windows · MSVC · MinSizeRel",
+      "description": "Size-optimised; PDB in build/symbols/.",
+      "inherits": ["_ninja", "_windows-msvc", "_minsize"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" }
+    },
+    {
+      "name": "windows-msvc-asan",
+      "displayName": "Windows · MSVC · ASan",
+      "description": "AddressSanitizer (/fsanitize=address). Only sanitizer supported by MSVC.",
+      "inherits": ["_ninja", "_windows-msvc", "_debug", "_asan"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" }
+    },
+    {
+      "name": "windows-msvc-coverage",
+      "displayName": "Windows · MSVC · Coverage",
+      "description": "OpenCppCoverage HTML report. Build target 'coverage'. Requires OpenCppCoverage on PATH.",
+      "inherits": ["_ninja", "_windows-msvc", "_debug", "_coverage"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" }
+    },
+
+    {
+      "name": "linux-gcc-debug",
+      "displayName": "Linux · GCC · Debug",
+      "inherits": ["_ninja", "_debug", "_gcc"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+    },
+    {
+      "name": "linux-gcc-release",
+      "displayName": "Linux · GCC · Release",
+      "description": "Optimised; DWARF extracted to build/symbols/*.dbg via objcopy.",
+      "inherits": ["_ninja", "_release", "_gcc"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+    },
+    {
+      "name": "linux-gcc-fastdebug",
+      "displayName": "Linux · GCC · FastDebug",
+      "description": "-O1 + full debug info.",
+      "inherits": ["_ninja", "_fastdebug", "_gcc"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+    },
+    {
+      "name": "linux-gcc-minsize",
+      "displayName": "Linux · GCC · MinSizeRel",
+      "inherits": ["_ninja", "_minsize", "_gcc"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+    },
+    {
+      "name": "linux-gcc-asan",
+      "displayName": "Linux · GCC · ASan",
+      "inherits": ["_ninja", "_debug", "_gcc", "_asan"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+    },
+    {
+      "name": "linux-gcc-tsan",
+      "displayName": "Linux · GCC · TSan",
+      "inherits": ["_ninja", "_debug", "_gcc", "_tsan"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+    },
+    {
+      "name": "linux-gcc-ubsan",
+      "displayName": "Linux · GCC · UBSan",
+      "inherits": ["_ninja", "_debug", "_gcc", "_ubsan"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+    },
+    {
+      "name": "linux-gcc-lsan",
+      "displayName": "Linux · GCC · LSan",
+      "inherits": ["_ninja", "_debug", "_gcc", "_lsan"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+    },
+    {
+      "name": "linux-gcc-coverage",
+      "displayName": "Linux · GCC · Coverage",
+      "description": "lcov + genhtml HTML report. Build target 'coverage'. Requires: sudo apt install lcov.",
+      "inherits": ["_ninja", "_debug", "_gcc", "_coverage"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+    },
+
+    {
+      "name": "linux-clang-debug",
+      "displayName": "Linux · Clang · Debug",
+      "inherits": ["_ninja", "_debug", "_clang"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+    },
+    {
+      "name": "linux-clang-release",
+      "displayName": "Linux · Clang · Release",
+      "inherits": ["_ninja", "_release", "_clang"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+    },
+    {
+      "name": "linux-clang-fastdebug",
+      "displayName": "Linux · Clang · FastDebug",
+      "inherits": ["_ninja", "_fastdebug", "_clang"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+    },
+    {
+      "name": "linux-clang-minsize",
+      "displayName": "Linux · Clang · MinSizeRel",
+      "inherits": ["_ninja", "_minsize", "_clang"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+    },
+    {
+      "name": "linux-clang-asan",
+      "displayName": "Linux · Clang · ASan",
+      "inherits": ["_ninja", "_debug", "_clang", "_asan"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+    },
+    {
+      "name": "linux-clang-msan",
+      "displayName": "Linux · Clang · MSan",
+      "description": "MemorySanitizer. Requires an instrumented libc++ — see MSan setup docs.",
+      "inherits": ["_ninja", "_debug", "_clang", "_msan"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+    },
+    {
+      "name": "linux-clang-tsan",
+      "displayName": "Linux · Clang · TSan",
+      "inherits": ["_ninja", "_debug", "_clang", "_tsan"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+    },
+    {
+      "name": "linux-clang-ubsan",
+      "displayName": "Linux · Clang · UBSan",
+      "inherits": ["_ninja", "_debug", "_clang", "_ubsan"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+    },
+    {
+      "name": "linux-clang-lsan",
+      "displayName": "Linux · Clang · LSan",
+      "inherits": ["_ninja", "_debug", "_clang", "_lsan"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+    },
+    {
+      "name": "linux-clang-coverage",
+      "displayName": "Linux · Clang · Coverage",
+      "description": "lcov (gcov-compat mode) HTML report. Build target 'coverage'. Requires: sudo apt install lcov.",
+      "inherits": ["_ninja", "_debug", "_clang", "_coverage"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+    },
+    {
+      "name": "linux-clang-fuzz",
+      "displayName": "Linux · Clang · Fuzz",
+      "description": "libFuzzer fuzz targets only. Run individual fuzz binaries for extended campaigns.",
+      "inherits": ["_ninja", "_debug", "_clang", "_fuzz"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+    },
+
+    {
+      "name": "macos-debug",
+      "displayName": "macOS · Clang · Debug",
+      "inherits": ["_ninja", "_debug"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Darwin" }
+    },
+    {
+      "name": "macos-release",
+      "displayName": "macOS · Clang · Release",
+      "description": "Optimised; dSYM bundles extracted to build/symbols/ via dsymutil.",
+      "inherits": ["_ninja", "_release"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Darwin" }
+    },
+    {
+      "name": "macos-fastdebug",
+      "displayName": "macOS · Clang · FastDebug",
+      "description": "-O1 + full debug info.",
+      "inherits": ["_ninja", "_fastdebug"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Darwin" }
+    },
+    {
+      "name": "macos-minsize",
+      "displayName": "macOS · Clang · MinSizeRel",
+      "inherits": ["_ninja", "_minsize"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Darwin" }
+    },
+    {
+      "name": "macos-asan",
+      "displayName": "macOS · Clang · ASan",
+      "inherits": ["_ninja", "_debug", "_asan"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Darwin" }
+    },
+    {
+      "name": "macos-tsan",
+      "displayName": "macOS · Clang · TSan",
+      "inherits": ["_ninja", "_debug", "_tsan"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Darwin" }
+    },
+    {
+      "name": "macos-ubsan",
+      "displayName": "macOS · Clang · UBSan",
+      "inherits": ["_ninja", "_debug", "_ubsan"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Darwin" }
+    },
+    {
+      "name": "macos-coverage",
+      "displayName": "macOS · Clang · Coverage",
+      "description": "llvm-cov HTML report. Build target 'coverage'. Requires: xcode-select --install.",
+      "inherits": ["_ninja", "_debug", "_coverage"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Darwin" }
+    },
+    {
+      "name": "macos-fuzz",
+      "displayName": "macOS · Clang · Fuzz",
+      "description": "libFuzzer fuzz targets on macOS.",
+      "inherits": ["_ninja", "_debug", "_fuzz"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Darwin" }
+    },
+
+    {
+      "name": "android-arm64",
+      "displayName": "Android · arm64-v8a · Release",
+      "description": "NDK cross-compile. Set ANDROID_NDK env var to NDK root. Tests disabled (run via ADB).",
+      "inherits": ["_ninja", "_release", "_no-tests", "_no-tidy"],
+      "toolchainFile": "$env{ANDROID_NDK}/build/cmake/android.toolchain.cmake",
+      "cacheVariables": {
+        "ANDROID_ABI":      "arm64-v8a",
+        "ANDROID_PLATFORM": "android-24",
+        "ANDROID_STL":      "c++_shared"
+      }
+    },
+    {
+      "name": "ios-arm64",
+      "displayName": "iOS · arm64 · Release",
+      "description": "Xcode cross-compile for iOS device. macOS host + Xcode required. Tests disabled.",
+      "generator": "Xcode",
+      "inherits": ["_base", "_release", "_no-tests", "_no-tidy"],
+      "cacheVariables": {
+        "CMAKE_SYSTEM_NAME":           "iOS",
+        "CMAKE_OSX_ARCHITECTURES":     "arm64",
+        "CMAKE_OSX_DEPLOYMENT_TARGET": "14.0"
+      },
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Darwin" }
+    },
+    {
+      "name": "wasm",
+      "displayName": "WebAssembly · Release",
+      "description": "Emscripten cross-compile. Run 'source $EMSDK/emsdk_env.sh' first, then set EMSDK env var.",
+      "inherits": ["_ninja", "_release", "_no-tests", "_no-tidy"],
+      "toolchainFile": "$env{EMSDK}/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"
+    }
+
+  ],
+
+  "buildPresets": [
+
+    { "name": "_build-base", "hidden": true, "jobs": 0 },
+
+    { "name": "windows-msvc-debug",     "inherits": "_build-base", "configurePreset": "windows-msvc-debug"     },
+    { "name": "windows-msvc-release",   "inherits": "_build-base", "configurePreset": "windows-msvc-release"   },
+    { "name": "windows-msvc-fastdebug", "inherits": "_build-base", "configurePreset": "windows-msvc-fastdebug" },
+    { "name": "windows-msvc-minsize",   "inherits": "_build-base", "configurePreset": "windows-msvc-minsize"   },
+    { "name": "windows-msvc-asan",      "inherits": "_build-base", "configurePreset": "windows-msvc-asan"      },
+    { "name": "windows-msvc-coverage",  "inherits": "_build-base", "configurePreset": "windows-msvc-coverage",  "targets": ["coverage"] },
+
+    { "name": "linux-gcc-debug",     "inherits": "_build-base", "configurePreset": "linux-gcc-debug"     },
+    { "name": "linux-gcc-release",   "inherits": "_build-base", "configurePreset": "linux-gcc-release"   },
+    { "name": "linux-gcc-fastdebug", "inherits": "_build-base", "configurePreset": "linux-gcc-fastdebug" },
+    { "name": "linux-gcc-minsize",   "inherits": "_build-base", "configurePreset": "linux-gcc-minsize"   },
+    { "name": "linux-gcc-asan",      "inherits": "_build-base", "configurePreset": "linux-gcc-asan"      },
+    { "name": "linux-gcc-tsan",      "inherits": "_build-base", "configurePreset": "linux-gcc-tsan"      },
+    { "name": "linux-gcc-ubsan",     "inherits": "_build-base", "configurePreset": "linux-gcc-ubsan"     },
+    { "name": "linux-gcc-lsan",      "inherits": "_build-base", "configurePreset": "linux-gcc-lsan"      },
+    { "name": "linux-gcc-coverage",  "inherits": "_build-base", "configurePreset": "linux-gcc-coverage",  "targets": ["coverage"] },
+
+    { "name": "linux-clang-debug",     "inherits": "_build-base", "configurePreset": "linux-clang-debug"     },
+    { "name": "linux-clang-release",   "inherits": "_build-base", "configurePreset": "linux-clang-release"   },
+    { "name": "linux-clang-fastdebug", "inherits": "_build-base", "configurePreset": "linux-clang-fastdebug" },
+    { "name": "linux-clang-minsize",   "inherits": "_build-base", "configurePreset": "linux-clang-minsize"   },
+    { "name": "linux-clang-asan",      "inherits": "_build-base", "configurePreset": "linux-clang-asan"      },
+    { "name": "linux-clang-msan",      "inherits": "_build-base", "configurePreset": "linux-clang-msan"      },
+    { "name": "linux-clang-tsan",      "inherits": "_build-base", "configurePreset": "linux-clang-tsan"      },
+    { "name": "linux-clang-ubsan",     "inherits": "_build-base", "configurePreset": "linux-clang-ubsan"     },
+    { "name": "linux-clang-lsan",      "inherits": "_build-base", "configurePreset": "linux-clang-lsan"      },
+    { "name": "linux-clang-coverage",  "inherits": "_build-base", "configurePreset": "linux-clang-coverage",  "targets": ["coverage"] },
+    { "name": "linux-clang-fuzz",      "inherits": "_build-base", "configurePreset": "linux-clang-fuzz"      },
+
+    { "name": "macos-debug",     "inherits": "_build-base", "configurePreset": "macos-debug"     },
+    { "name": "macos-release",   "inherits": "_build-base", "configurePreset": "macos-release"   },
+    { "name": "macos-fastdebug", "inherits": "_build-base", "configurePreset": "macos-fastdebug" },
+    { "name": "macos-minsize",   "inherits": "_build-base", "configurePreset": "macos-minsize"   },
+    { "name": "macos-asan",      "inherits": "_build-base", "configurePreset": "macos-asan"      },
+    { "name": "macos-tsan",      "inherits": "_build-base", "configurePreset": "macos-tsan"      },
+    { "name": "macos-ubsan",     "inherits": "_build-base", "configurePreset": "macos-ubsan"     },
+    { "name": "macos-coverage",  "inherits": "_build-base", "configurePreset": "macos-coverage",  "targets": ["coverage"] },
+    { "name": "macos-fuzz",      "inherits": "_build-base", "configurePreset": "macos-fuzz"      },
+
+    { "name": "android-arm64", "inherits": "_build-base", "configurePreset": "android-arm64" },
+    { "name": "ios-arm64",     "inherits": "_build-base", "configurePreset": "ios-arm64"     },
+    { "name": "wasm",          "inherits": "_build-base", "configurePreset": "wasm"          }
+
+  ],
+
+  "testPresets": [
+
+    {
+      "name": "_test-base",
+      "hidden": true,
+      "output":    { "outputOnFailure": true },
+      "execution": { "jobs": 0 }
+    },
+
+    { "name": "windows-msvc-debug-unit",       "displayName": "Windows · MSVC · unit",       "inherits": "_test-base", "configurePreset": "windows-msvc-debug", "filter": { "include": { "label": "unit"       } } },
+    { "name": "windows-msvc-debug-regression", "displayName": "Windows · MSVC · regression", "inherits": "_test-base", "configurePreset": "windows-msvc-debug", "filter": { "include": { "label": "regression"  } } },
+    { "name": "windows-msvc-debug-all",        "displayName": "Windows · MSVC · all",        "inherits": "_test-base", "configurePreset": "windows-msvc-debug" },
+
+    { "name": "linux-gcc-debug-unit",       "displayName": "Linux · GCC · unit",       "inherits": "_test-base", "configurePreset": "linux-gcc-debug", "filter": { "include": { "label": "unit"      } } },
+    { "name": "linux-gcc-debug-regression", "displayName": "Linux · GCC · regression", "inherits": "_test-base", "configurePreset": "linux-gcc-debug", "filter": { "include": { "label": "regression" } } },
+    { "name": "linux-gcc-debug-all",        "displayName": "Linux · GCC · all",        "inherits": "_test-base", "configurePreset": "linux-gcc-debug" },
+
+    { "name": "linux-clang-debug-unit",       "displayName": "Linux · Clang · unit",       "inherits": "_test-base", "configurePreset": "linux-clang-debug", "filter": { "include": { "label": "unit"      } } },
+    { "name": "linux-clang-debug-regression", "displayName": "Linux · Clang · regression", "inherits": "_test-base", "configurePreset": "linux-clang-debug", "filter": { "include": { "label": "regression" } } },
+    { "name": "linux-clang-debug-all",        "displayName": "Linux · Clang · all",        "inherits": "_test-base", "configurePreset": "linux-clang-debug" },
+
+    { "name": "macos-debug-unit",       "displayName": "macOS · Clang · unit",       "inherits": "_test-base", "configurePreset": "macos-debug", "filter": { "include": { "label": "unit"      } } },
+    { "name": "macos-debug-regression", "displayName": "macOS · Clang · regression", "inherits": "_test-base", "configurePreset": "macos-debug", "filter": { "include": { "label": "regression" } } },
+    { "name": "macos-debug-all",        "displayName": "macOS · Clang · all",        "inherits": "_test-base", "configurePreset": "macos-debug" }
+
+  ],
+
+  "workflowPresets": [
+
+    {
+      "name": "dev-windows",
+      "displayName": "Dev: Windows MSVC Debug",
+      "steps": [
+        { "type": "configure", "name": "windows-msvc-debug"    },
+        { "type": "build",     "name": "windows-msvc-debug"    },
+        { "type": "test",      "name": "windows-msvc-debug-all" }
+      ]
+    },
+    {
+      "name": "dev-linux-gcc",
+      "displayName": "Dev: Linux GCC Debug",
+      "steps": [
+        { "type": "configure", "name": "linux-gcc-debug"    },
+        { "type": "build",     "name": "linux-gcc-debug"    },
+        { "type": "test",      "name": "linux-gcc-debug-all" }
+      ]
+    },
+    {
+      "name": "dev-linux-clang",
+      "displayName": "Dev: Linux Clang Debug",
+      "steps": [
+        { "type": "configure", "name": "linux-clang-debug"    },
+        { "type": "build",     "name": "linux-clang-debug"    },
+        { "type": "test",      "name": "linux-clang-debug-all" }
+      ]
+    },
+    {
+      "name": "dev-macos",
+      "displayName": "Dev: macOS Clang Debug",
+      "steps": [
+        { "type": "configure", "name": "macos-debug"    },
+        { "type": "build",     "name": "macos-debug"    },
+        { "type": "test",      "name": "macos-debug-all" }
+      ]
+    },
+    {
+      "name": "ci-linux-gcc-coverage",
+      "displayName": "CI: Linux GCC Coverage report",
+      "steps": [
+        { "type": "configure", "name": "linux-gcc-coverage" },
+        { "type": "build",     "name": "linux-gcc-coverage" }
+      ]
+    },
+    {
+      "name": "ci-linux-clang-asan",
+      "displayName": "CI: Linux Clang ASan",
+      "steps": [
+        { "type": "configure", "name": "linux-clang-asan" },
+        { "type": "build",     "name": "linux-clang-asan" }
+      ]
+    },
+    {
+      "name": "ci-linux-clang-msan",
+      "displayName": "CI: Linux Clang MSan",
+      "steps": [
+        { "type": "configure", "name": "linux-clang-msan" },
+        { "type": "build",     "name": "linux-clang-msan" }
+      ]
+    },
+    {
+      "name": "ci-linux-clang-tsan",
+      "displayName": "CI: Linux Clang TSan",
+      "steps": [
+        { "type": "configure", "name": "linux-clang-tsan" },
+        { "type": "build",     "name": "linux-clang-tsan" }
+      ]
+    },
+    {
+      "name": "ci-linux-clang-fuzz",
+      "displayName": "CI: Linux Clang Fuzz",
+      "steps": [
+        { "type": "configure", "name": "linux-clang-fuzz" },
+        { "type": "build",     "name": "linux-clang-fuzz" }
+      ]
+    }
+
+  ]
+}

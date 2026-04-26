@@ -6,8 +6,6 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![C++23](https://img.shields.io/badge/C%2B%2B-23-blue.svg)](https://en.cppreference.com/w/cpp/23)
 
-> **Disclaimer:** The AI-generated content in this template may contain marketing-like language that does not reflect the author's intention. This project was created as an exercise. For the original project requirements (in Chinese), see [README.original.zh.md](README.original.zh.md). For the English translation, see [README.original.md](README.original.md).
-
 This is a **modern C++ project template** created from scratch, containing a complete build system, testing framework, CI/CD configuration, and development toolchain. It can serve as a starting point for new projects, saving a significant amount of configuration time.
 
 ## ✨ Why Choose This Template?
@@ -188,7 +186,6 @@ For detailed project structure, see [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)
 
 # Other options
 -DAPE_TEMPLATE_BUILD_DOCS=OFF              # Build documentation
--DAPE_TEMPLATE_STRIP_SYMBOLS=OFF           # Strip symbols
 -DAPE_TEMPLATE_ENABLE_DISTRIBUTED_BUILD=OFF # Distributed build
 -DAPE_TEMPLATE_USE_MODULES=ON              # Enable C++ modules
 ```
@@ -207,9 +204,11 @@ ctest -L unit
 # Run regression tests only
 ctest -L regression
 
-# Generate code coverage report
-cmake -B build -DAPE_TEMPLATE_ENABLE_COVERAGE=ON
+# Generate code coverage report (Debug build required)
+# Tool is selected automatically: OpenCppCoverage (MSVC), llvm-cov (macOS), lcov (Linux)
+cmake -B build -DCMAKE_BUILD_TYPE=Debug -DAPE_TEMPLATE_ENABLE_COVERAGE=ON
 cmake --build build --target coverage
+# Report: build/coverage/index.html
 ```
 
 ## 📚 Documentation
@@ -296,7 +295,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 For questions or suggestions:
 - Submit an [Issue](https://github.com/xbigo/ape-template/issues)
 - Start a [Discussion](https://github.com/xbigo/ape-template/discussions)
-- If you find it useful, please give it a ⭐️
 
 ## 🙏 Acknowledgments
 
@@ -308,4 +306,3 @@ Thanks to the following open source projects:
 
 ---
 
-**✨ Use this template to start your C++ project on the right path from the beginning!**

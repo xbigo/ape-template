@@ -34,7 +34,10 @@ This document provides detailed instructions for building the ape-template proje
 - Doxygen (for documentation)
 - clang-format (for code formatting)
 - clang-tidy (for static analysis)
-- lcov/gcovr (for code coverage)
+- Coverage tools (selected automatically by platform):
+  - **Windows MSVC**: OpenCppCoverage — install from https://github.com/OpenCppCoverage/OpenCppCoverage/releases
+  - **macOS**: Xcode Command Line Tools (`xcode-select --install`) — provides `llvm-profdata` and `llvm-cov`
+  - **Linux GCC/Clang**: lcov + genhtml (`sudo apt-get install lcov`)
 
 ## Quick Start
 
@@ -186,29 +189,28 @@ cmake --build build-wasm --parallel
 
 ```bash
 # Enable/disable features
--DAPE2_BUILD_TESTS=ON              # Build tests (default: ON)
--DAPE2_BUILD_UNIT_TESTS=ON         # Build unit tests (default: ON)
--DAPE2_BUILD_REGRESSION_TESTS=ON   # Build regression tests (default: ON)
--DAPE2_BUILD_FUZZ_TESTS=OFF        # Build fuzz tests (default: OFF)
--DAPE2_BUILD_BENCHMARKS=ON         # Build benchmarks (default: ON)
--DAPE2_BUILD_DOCS=OFF              # Build documentation (default: OFF)
+-DAPE_TEMPLATE_BUILD_TESTS=ON              # Build tests (default: ON)
+-DAPE_TEMPLATE_BUILD_UNIT_TESTS=ON         # Build unit tests (default: ON)
+-DAPE_TEMPLATE_BUILD_REGRESSION_TESTS=ON   # Build regression tests (default: ON)
+-DAPE_TEMPLATE_BUILD_FUZZ_TESTS=OFF        # Build fuzz tests (default: OFF)
+-DAPE_TEMPLATE_BUILD_BENCHMARKS=ON         # Build benchmarks (default: ON)
+-DAPE_TEMPLATE_BUILD_DOCS=OFF              # Build documentation (default: OFF)
 
 # Code quality
--DAPE2_ENABLE_COVERAGE=OFF         # Enable code coverage (default: OFF)
--DAPE2_ENABLE_CLANG_TIDY=ON        # Enable clang-tidy (default: ON)
+-DAPE_TEMPLATE_ENABLE_COVERAGE=OFF         # Enable code coverage (default: OFF)
+-DAPE_TEMPLATE_ENABLE_CLANG_TIDY=ON        # Enable clang-tidy (default: ON)
 
 # Sanitizers
--DAPE2_ENABLE_SANITIZERS=OFF       # Enable sanitizers (default: OFF)
--DAPE2_SANITIZER_TYPE=address      # Sanitizer type (address|memory|thread|undefined)
+-DAPE_TEMPLATE_ENABLE_SANITIZERS=OFF       # Enable sanitizers (default: OFF)
+-DAPE_TEMPLATE_SANITIZER_TYPE=address      # Sanitizer type (address|memory|thread|undefined)
 
 # Build options
--DAPE2_STRIP_SYMBOLS=OFF           # Strip symbols from libraries (default: OFF)
--DAPE2_ENABLE_DISTRIBUTED_BUILD=OFF # Enable distributed build (default: OFF)
--DAPE2_USE_MODULES=ON              # Enable C++ modules (default: ON)
--DAPE2_INSTALL=ON                  # Enable install target (default: ON)
+-DAPE_TEMPLATE_ENABLE_DISTRIBUTED_BUILD=OFF # Enable distributed build (default: OFF)
+-DAPE_TEMPLATE_USE_MODULES=ON              # Enable C++ modules (default: ON)
+-DAPE_TEMPLATE_INSTALL=ON                  # Enable install target (default: ON)
 
 # Package manager
--DAPE2_PACKAGE_MANAGER=conan       # Package manager (conan|vcpkg|none)
+-DAPE_TEMPLATE_PACKAGE_MANAGER=conan       # Package manager (conan|vcpkg|none)
 ```
 
 ### Example Configurations
@@ -217,19 +219,19 @@ cmake --build build-wasm --parallel
 # Debug build with sanitizers
 cmake -B build-debug -G Ninja \
     -DCMAKE_BUILD_TYPE=Debug \
-    -DAPE2_ENABLE_SANITIZERS=ON \
-    -DAPE2_SANITIZER_TYPE=address
+    -DAPE_TEMPLATE_ENABLE_SANITIZERS=ON \
+    -DAPE_TEMPLATE_SANITIZER_TYPE=address
 
 # Release build with tests and coverage
 cmake -B build-coverage -G Ninja \
     -DCMAKE_BUILD_TYPE=Debug \
-    -DAPE2_ENABLE_COVERAGE=ON
+    -DAPE_TEMPLATE_ENABLE_COVERAGE=ON
 
 # Minimal release build (no tests)
+# Debug symbols are always separated into build/symbols/ automatically.
 cmake -B build-minimal -G Ninja \
     -DCMAKE_BUILD_TYPE=Release \
-    -DAPE2_BUILD_TESTS=OFF \
-    -DAPE2_STRIP_SYMBOLS=ON
+    -DAPE_TEMPLATE_BUILD_TESTS=OFF
 ```
 
 ## Docker Builds
@@ -285,15 +287,40 @@ ctest -V
 # Run tests in parallel
 ctest -j$(nproc)
 
-# Generate coverage report (Linux/macOS)
+# Generate coverage report
+# The coverage tool is selected automatically based on platform and compiler.
+# Always use Debug builds for accurate results.
+#
+# Windows MSVC  — requires OpenCppCoverage installed and on PATH
+#   https://github.com/OpenCppCoverage/OpenCppCoverage/releases
+cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DAPE_TEMPLATE_ENABLE_COVERAGE=ON
 cmake --build build --target coverage
+#
+# macOS (Apple Clang / LLVM Clang) — requires Xcode Command Line Tools
+#   xcode-select --install
+cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DAPE_TEMPLATE_ENABLE_COVERAGE=ON
+cmake --build build --target coverage
+#
+# Linux GCC — requires lcov + genhtml
+#   sudo apt-get install lcov
+cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug \
+    -DCMAKE_CXX_COMPILER=g++ -DAPE_TEMPLATE_ENABLE_COVERAGE=ON
+cmake --build build --target coverage
+#
+# Linux Clang — same lcov pipeline (gcov-compat mode)
+#   sudo apt-get install lcov
+cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug \
+    -DCMAKE_CXX_COMPILER=clang++ -DAPE_TEMPLATE_ENABLE_COVERAGE=ON
+cmake --build build --target coverage
+#
+# Report output: build/coverage/index.html
 ```
 
 ## Documentation
 
 ```bash
 # Generate documentation with Doxygen
-cmake -B build -DAPE2_BUILD_DOCS=ON
+cmake -B build -DAPE_TEMPLATE_BUILD_DOCS=ON
 cmake --build build --target doc
 
 # View documentation
@@ -345,7 +372,7 @@ Some sanitizers have known incompatibilities. Try different sanitizers:
 
 ```bash
 # Try different sanitizers
-cmake -B build -DAPE2_ENABLE_SANITIZERS=ON -DAPE2_SANITIZER_TYPE=undefined
+cmake -B build -DAPE_TEMPLATE_ENABLE_SANITIZERS=ON -DAPE_TEMPLATE_SANITIZER_TYPE=undefined
 ```
 
 ## Support

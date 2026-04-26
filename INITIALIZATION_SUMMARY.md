@@ -284,7 +284,6 @@ cmake --build build --target doc
 | APE_TEMPLATE_BUILD_DOCS | OFF | Build documentation |
 | APE_TEMPLATE_ENABLE_COVERAGE | OFF | Enable code coverage |
 | APE_TEMPLATE_ENABLE_SANITIZERS | OFF | Enable sanitizers |
-| APE_TEMPLATE_STRIP_SYMBOLS | OFF | Strip symbols |
 | APE_TEMPLATE_ENABLE_DISTRIBUTED_BUILD | OFF | Distributed build |
 | APE_TEMPLATE_ENABLE_CLANG_TIDY | ON | Enable clang-tidy |
 | APE_TEMPLATE_USE_MODULES | ON | Enable C++ modules |

@@ -74,7 +74,7 @@ Get-ChildItem -Recurse -Include *.cpp,*.hpp,*.h | ForEach-Object { clang-format 
 Run clang-tidy to check for code issues:
 
 ```bash
-cmake -B build -DAPE2_ENABLE_CLANG_TIDY=ON
+cmake -B build -DAPE_TEMPLATE_ENABLE_CLANG_TIDY=ON
 cmake --build build
 ```
 
@@ -209,13 +209,22 @@ TEST(StringUtilsTest, SplitDividesString) {
 
 - Aim for high test coverage (>80%)
 - Test edge cases and error conditions
-- Run coverage analysis:
+- Run coverage analysis (tool selected automatically, always use Debug build):
 
 ```bash
-cmake -B build -DAPE2_ENABLE_COVERAGE=ON
-cmake --build build
+cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DAPE_TEMPLATE_ENABLE_COVERAGE=ON
 cmake --build build --target coverage
+# Report: build/coverage/index.html
 ```
+
+Coverage tool per platform:
+
+| Platform | Compiler | Tool | Prerequisites |
+|----------|----------|------|---------------|
+| Windows | MSVC | OpenCppCoverage | Install from GitHub releases, add to PATH |
+| macOS | Apple Clang / Clang | xcrun llvm-cov | `xcode-select --install` |
+| Linux | GCC | lcov + genhtml | `sudo apt-get install lcov` |
+| Linux | Clang | lcov + genhtml | `sudo apt-get install lcov` |
 
 ## Documentation
 

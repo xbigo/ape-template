@@ -33,7 +33,7 @@ jobs:
     - name: Configure CMake
       run: |
         cmake -B build \
-          -DAPE2_BUILD_DOCS=ON \
+          -DAPE_TEMPLATE_BUILD_DOCS=ON \
           -G Ninja
 
     - name: Build documentation

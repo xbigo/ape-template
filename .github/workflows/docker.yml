@@ -77,7 +77,7 @@ jobs:
             -DANDROID_PLATFORM=android-24 \
             -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
-            -DAPE2_BUILD_TESTS=OFF && \
+            -DAPE_TEMPLATE_BUILD_TESTS=OFF && \
             cmake --build /build --parallel"
 
     - name: Upload artifacts
@@ -111,7 +111,7 @@ jobs:
           -w /workspace \
           ape-template-wasm:latest \
           bash -c "source /opt/emsdk/emsdk_env.sh && \
-            emcmake cmake -B /build -S /workspace -G Ninja -DCMAKE_BUILD_TYPE=Release -DAPE2_BUILD_TESTS=OFF && \
+            emcmake cmake -B /build -S /workspace -G Ninja -DCMAKE_BUILD_TYPE=Release -DAPE_TEMPLATE_BUILD_TESTS=OFF && \
             cmake --build /build --parallel"
 
     - name: Upload artifacts

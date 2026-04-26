@@ -51,7 +51,7 @@ class Ape2Conan(ConanFile):
         deps = CMakeDeps(self)
         deps.generate()
         tc = CMakeToolchain(self)
-        tc.variables["APE2_BUILD_TESTS"] = self.options.enable_tests
+        tc.variables["APE_TEMPLATE_BUILD_TESTS"] = self.options.enable_tests
         tc.generate()
 
     def build(self):

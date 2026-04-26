@@ -58,7 +58,7 @@
 - ✓ Sanitizer支持 (Address, Memory, Thread, Undefined, Leak)
 - ✓ C++模块支持
 - ✓ clang-tidy集成
-- ✓ 代码覆盖率报告
+- ✓ 代码覆盖率报告（按平台选择工具：MSVC→OpenCppCoverage，macOS→llvm-cov，Linux→lcov）
 - ✓ 符号剥离选项
 - ✓ 分布式编译支持
 
@@ -88,7 +88,7 @@
 - ✓ 自动测试发现 (gtest_discover_tests)
 - ✓ Post-build测试执行
 - ✓ 标签化测试 (unit, regression)
-- ✓ 代码覆盖率生成
+- ✓ 代码覆盖率生成（按平台：OpenCppCoverage/llvm-cov/lcov）
 
 ### 5. Docker支持 ✓
 
@@ -250,14 +250,14 @@ ls -la build-linux-release/
 find src include tests -name "*.cpp" -o -name "*.hpp" | xargs clang-format --dry-run --Werror
 
 # 静态分析
-cmake -B build -DAPE2_ENABLE_CLANG_TIDY=ON
+cmake -B build -DAPE_TEMPLATE_ENABLE_CLANG_TIDY=ON
 cmake --build build
 ```
 
 ### 4. 生成文档
 
 ```bash
-cmake -B build -DAPE2_BUILD_DOCS=ON
+cmake -B build -DAPE_TEMPLATE_BUILD_DOCS=ON
 cmake --build build --target doc
 ```
 
@@ -276,19 +276,18 @@ cmake --build build --target doc
 
 | 选项 | 默认值 | 说明 |
 |------|--------|------|
-| APE2_BUILD_TESTS | ON | 构建测试 |
-| APE2_BUILD_UNIT_TESTS | ON | 构建单元测试 |
-| APE2_BUILD_REGRESSION_TESTS | ON | 构建回归测试 |
-| APE2_BUILD_FUZZ_TESTS | OFF | 构建Fuzz测试 |
-| APE2_BUILD_BENCHMARKS | ON | 构建性能测试 |
-| APE2_BUILD_DOCS | OFF | 构建文档 |
-| APE2_ENABLE_COVERAGE | OFF | 启用代码覆盖率 |
-| APE2_ENABLE_SANITIZERS | OFF | 启用Sanitizers |
-| APE2_STRIP_SYMBOLS | OFF | 剥离符号 |
-| APE2_ENABLE_DISTRIBUTED_BUILD | OFF | 分布式编译 |
-| APE2_ENABLE_CLANG_TIDY | ON | 启用clang-tidy |
-| APE2_USE_MODULES | ON | 启用C++模块 |
-| APE2_INSTALL | ON | 启用安装目标 |
+| APE_TEMPLATE_BUILD_TESTS | ON | 构建测试 |
+| APE_TEMPLATE_BUILD_UNIT_TESTS | ON | 构建单元测试 |
+| APE_TEMPLATE_BUILD_REGRESSION_TESTS | ON | 构建回归测试 |
+| APE_TEMPLATE_BUILD_FUZZ_TESTS | OFF | 构建Fuzz测试 |
+| APE_TEMPLATE_BUILD_BENCHMARKS | ON | 构建性能测试 |
+| APE_TEMPLATE_BUILD_DOCS | OFF | 构建文档 |
+| APE_TEMPLATE_ENABLE_COVERAGE | OFF | 启用代码覆盖率 |
+| APE_TEMPLATE_ENABLE_SANITIZERS | OFF | 启用Sanitizers |
+| APE_TEMPLATE_ENABLE_DISTRIBUTED_BUILD | OFF | 分布式编译 |
+| APE_TEMPLATE_ENABLE_CLANG_TIDY | ON | 启用clang-tidy |
+| APE_TEMPLATE_USE_MODULES | ON | 启用C++模块 |
+| APE_TEMPLATE_INSTALL | ON | 启用安装目标 |
 
 ## 📝 后续工作
 

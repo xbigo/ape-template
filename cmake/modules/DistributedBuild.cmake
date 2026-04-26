@@ -1,7 +1,7 @@
 # DistributedBuild.cmake
 # Enable distributed compilation
 
-if(APE2_ENABLE_DISTRIBUTED_BUILD)
+if(APE_TEMPLATE_ENABLE_DISTRIBUTED_BUILD)
     if(MSVC)
         # Find IncrediBuild for MSVC
         find_program(INCREDIBUILD_EXE NAMES BuildConsole)

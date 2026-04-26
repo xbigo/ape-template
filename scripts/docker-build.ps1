@@ -74,7 +74,7 @@ else {
 }
 
 if ($Sanitizer -ne "") {
-    $CMakeArgs += " -DAPE2_ENABLE_SANITIZERS=ON -DAPE2_SANITIZER_TYPE=$Sanitizer"
+    $CMakeArgs += " -DAPE_TEMPLATE_ENABLE_SANITIZERS=ON -DAPE_TEMPLATE_SANITIZER_TYPE=$Sanitizer"
 }
 
 # Check if secrets directory has any files to mount

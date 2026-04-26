@@ -162,7 +162,7 @@ C++模块的编译可能比传统头文件慢，但会带来：
 
 1. **使用预编译模块接口**
    ```bash
-   cmake -B build -DAPE2_PRECOMPILE_MODULES=ON
+   cmake -B build -DAPE_TEMPLATE_PRECOMPILE_MODULES=ON
    ```
 
 2. **启用并行编译**
@@ -172,7 +172,7 @@ C++模块的编译可能比传统头文件慢，但会带来：
 
 3. **使用ccache加速**
    ```bash
-   cmake -B build -DAPE2_ENABLE_DISTRIBUTED_BUILD=ON
+   cmake -B build -DAPE_TEMPLATE_ENABLE_DISTRIBUTED_BUILD=ON
    ```
 
 ## 🔧 故障排除
@@ -192,7 +192,7 @@ cmake -B build \
 **解决方案：**
 ```bash
 # 确保启用了模块支持
-cmake -B build -DAPE2_USE_MODULES=ON
+cmake -B build -DAPE_TEMPLATE_USE_MODULES=ON
 ```
 
 ### 问题：标准库模块找不到

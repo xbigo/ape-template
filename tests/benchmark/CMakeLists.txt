@@ -27,6 +27,11 @@ target_link_libraries(bench_string_utils
         benchmark::benchmark_main
 )
 
+# Separate debug symbols into build/symbols/ (all platforms)
+if(COMMAND extract_debug_symbols)
+    extract_debug_symbols(bench_string_utils)
+endif()
+
 # Benchmarks are not run as part of normal testing
 # They can be run manually with: ./bench_string_utils
 

@@ -6,7 +6,6 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![C++23](https://img.shields.io/badge/C%2B%2B-23-blue.svg)](https://en.cppreference.com/w/cpp/23)
 
-> **免责声明：** 本模板中AI生成的内容可能包含营销性语言，这并不反映作者的本意。本项目作为练习创建。原始项目需求（中文）见 [README.original.zh.md](README.original.zh.md)，英文翻译见 [README.original.md](README.original.md)。
 
 这是一个从零开始创建的**现代C++项目模板**，包含完整的构建系统、测试框架、CI/CD配置和开发工具链。可作为新项目的起点，节省大量配置时间。
 
@@ -188,7 +187,6 @@ ape-template/
 
 # 其他选项
 -DAPE_TEMPLATE_BUILD_DOCS=OFF              # 生成文档
--DAPE_TEMPLATE_STRIP_SYMBOLS=OFF           # 剥离符号
 -DAPE_TEMPLATE_ENABLE_DISTRIBUTED_BUILD=OFF # 分布式编译
 -DAPE_TEMPLATE_USE_MODULES=ON              # 启用C++模块
 ```
@@ -207,9 +205,11 @@ ctest -L unit
 # 只运行回归测试
 ctest -L regression
 
-# 生成代码覆盖率报告
-cmake -B build -DAPE_TEMPLATE_ENABLE_COVERAGE=ON
+# 生成代码覆盖率报告（需 Debug 构建）
+# 工具按平台自动选择：MSVC→OpenCppCoverage，macOS→llvm-cov，Linux→lcov
+cmake -B build -DCMAKE_BUILD_TYPE=Debug -DAPE_TEMPLATE_ENABLE_COVERAGE=ON
 cmake --build build --target coverage
+# 报告：build/coverage/index.html
 ```
 
 ## 📚 文档
@@ -296,7 +296,6 @@ cmake --build build --target doc
 如有问题或建议，请：
 - 提交 [Issue](https://github.com/xbigo/ape-template/issues)
 - 发起 [Discussion](https://github.com/xbigo/ape-template/discussions)
-- 如果觉得有用，请给个 ⭐️
 
 ## 🙏 致谢
 
@@ -307,5 +306,3 @@ cmake --build build --target doc
 - [Doxygen](https://www.doxygen.nl/)
 
 ---
-
-**✨ 使用此模板，让您的C++项目从一开始就走在正确的道路上！**

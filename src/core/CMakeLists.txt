@@ -34,8 +34,8 @@ target_include_directories(ape_template_core
 # Link warnings
 target_link_libraries(ape_template_core PRIVATE ape_template_warnings)
 
-# Extract debug symbols on Unix-like systems
-if(UNIX AND NOT APPLE AND COMMAND extract_debug_symbols)
+# Separate debug symbols into build/symbols/ (all platforms)
+if(COMMAND extract_debug_symbols)
     extract_debug_symbols(ape_template_core)
 endif()
 

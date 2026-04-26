@@ -184,8 +184,8 @@ jobs:
           -DCMAKE_BUILD_TYPE=Debug \
           -DCMAKE_C_COMPILER=clang-19 \
           -DCMAKE_CXX_COMPILER=clang++-19 \
-          -DAPE2_ENABLE_SANITIZERS=ON \
-          -DAPE2_SANITIZER_TYPE=${{ matrix.sanitizer }} \
+          -DAPE_TEMPLATE_ENABLE_SANITIZERS=ON \
+          -DAPE_TEMPLATE_SANITIZER_TYPE=${{ matrix.sanitizer }} \
           -G Ninja
 
     - name: Build
@@ -223,7 +223,7 @@ jobs:
           -DCMAKE_BUILD_TYPE=Debug \
           -DCMAKE_C_COMPILER=gcc-15 \
           -DCMAKE_CXX_COMPILER=g++-15 \
-          -DAPE2_ENABLE_COVERAGE=ON \
+          -DAPE_TEMPLATE_ENABLE_COVERAGE=ON \
           -G Ninja
 
     - name: Build
@@ -292,7 +292,7 @@ jobs:
           -DCMAKE_BUILD_TYPE=Debug \
           -DCMAKE_C_COMPILER=clang-19 \
           -DCMAKE_CXX_COMPILER=clang++-19 \
-          -DAPE2_ENABLE_CLANG_TIDY=ON \
+          -DAPE_TEMPLATE_ENABLE_CLANG_TIDY=ON \
           -G Ninja
 
     - name: Build (with clang-tidy)
