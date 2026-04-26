@@ -25,7 +25,25 @@ set(APE_TEMPLATE_MIN_MSVC_VERSION 19.42)
 
 # ─── CMake 3.30+: modules are stable; no UUID or dyndep flag needed ──────────
 if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.30")
-    message(STATUS "C++ modules: stable API (CMake ${CMAKE_VERSION}), dyndep managed automatically")
+    if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND APE_TEMPLATE_ENABLE_CLANG_TIDY)
+        # CMake 3.30 automatically enables C++ module scanning (dyndep) for GCC,
+        # injecting -fmodule-mapper and -fdeps-format=p1689r5 into every compile
+        # command.  clang-tidy's Clang front-end does not recognise these GCC-
+        # specific driver flags and hard-fails; it may also attempt to process
+        # GCC's std.cc with incorrect include paths, producing:
+        #   fatal error: 'bits/stdc++.h' file not found
+        # Disable module scanning so no GCC module flags reach clang-tidy.
+        # This is the same trade-off as for CMake 3.28-3.29 (see note above):
+        # inter-module build ordering is not tracked automatically, which is
+        # harmless for this project because no source file uses export module.
+        set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
+        message(STATUS
+            "C++ modules: stable API (CMake ${CMAKE_VERSION}), "
+            "module scanning disabled for GCC + clang-tidy compatibility "
+            "(use linux-gcc-*-import-std preset to enable full module support)")
+    else()
+        message(STATUS "C++ modules: stable API (CMake ${CMAKE_VERSION}), dyndep managed automatically")
+    endif()
     return()
 endif()
 

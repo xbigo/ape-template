@@ -17,11 +17,24 @@
 #               (Linux / BSD)                 (libstdc++ and libc++ are ABI-
 #                                             incompatible; mixing is not safe).
 #                                             Requires: apt install libc++-18-dev
+#                                             clang-tidy disabled (see note below)
 #   GCC 15.2+   (clang-tidy OFF)  Experimental  Needs dyndep; CppModules.cmake
 #                                             enables it when tidy is off.
 #   GCC 15.2+   (clang-tidy ON)   Unsupported   dyndep/tidy conflict; choose one.
 #   Apple Clang (any)             Unsupported   Not supported in Xcode ≤ 16.
 #   Android NDK / Emscripten      Unsupported   —
+#
+# Clang + clang-tidy note (CMake 4.3+)
+#   When CXX_MODULE_STD is set on any target, CMake creates an internal target
+#   __cmake_cxx23 to compile the std module.  On CMake 4.3.1+ when the libc++
+#   module package is not installed, CMake falls back to GCC's bits/std.cc as
+#   the module source.  If clang-tidy runs on that file while -stdlib=libc++ is
+#   in scope, it produces a hard driver error:
+#     fatal error: 'bits/stdc++.h' file not found
+#   because bits/stdc++.h is a libstdc++ header absent from libc++'s paths.
+#   The linux-clang-*-import-std presets therefore set APE_TEMPLATE_ENABLE_CLANG_TIDY=OFF.
+#   A deferred cmake_language(DEFER ...) call below provides a belt-and-suspenders
+#   guard by explicitly clearing CXX_CLANG_TIDY on __cmake_cxx23 if it exists.
 #
 # Usage in src/CMakeLists.txt
 #   configure_import_std(<target>)   # no-op when unsupported
@@ -67,6 +80,17 @@ elseif(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang" AND NOT APPLE)
     # including GoogleTest and benchmark, uses the same runtime.
     add_compile_options(-stdlib=libc++)
     add_link_options(-stdlib=libc++)
+
+    # Belt-and-suspenders guard: see "Clang + clang-tidy note" in the file header.
+    # If __cmake_cxx23 exists when the top-level CMakeLists.txt finishes, clear its
+    # CXX_CLANG_TIDY property so clang-tidy does not run on the fallback std.cc.
+    function(_ape_template_disable_tidy_on_cmake_cxx23)
+        if(TARGET __cmake_cxx23)
+            set_target_properties(__cmake_cxx23 PROPERTIES CXX_CLANG_TIDY "")
+        endif()
+    endfunction()
+    cmake_language(DEFER DIRECTORY "${CMAKE_SOURCE_DIR}"
+        CALL _ape_template_disable_tidy_on_cmake_cxx23)
 
     function(configure_import_std target)
         set_property(TARGET ${target} PROPERTY CXX_MODULE_STD 1)

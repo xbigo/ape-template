@@ -381,15 +381,15 @@
     {
       "name": "linux-clang-debug-import-std",
       "displayName": "Linux · Clang · Debug · import std",
-      "description": "Debug + 'import std;' via libc++. Requires CMake 3.30+, Clang 18+, libc++ with module support (apt install libc++-18-dev).",
-      "inherits": ["_ninja", "_debug", "_clang", "_import-std"],
+      "description": "Debug + 'import std;' via libc++. clang-tidy disabled (CMake's internal __cmake_cxx23 target may compile GCC's std.cc, which is incompatible with clang-tidy under -stdlib=libc++). Requires CMake 3.30+, Clang 18+, libc++ with module support (apt install libc++-18-dev).",
+      "inherits": ["_ninja", "_debug", "_clang", "_import-std", "_no-tidy"],
       "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
     },
     {
       "name": "linux-clang-release-import-std",
       "displayName": "Linux · Clang · Release · import std",
-      "description": "Release + 'import std;' via libc++. Same requirements as linux-clang-debug-import-std.",
-      "inherits": ["_ninja", "_release", "_clang", "_import-std"],
+      "description": "Release + 'import std;' via libc++. clang-tidy disabled — same reason as linux-clang-debug-import-std.",
+      "inherits": ["_ninja", "_release", "_clang", "_import-std", "_no-tidy"],
       "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
     },
 
