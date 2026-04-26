@@ -126,6 +126,12 @@
         "APE_TEMPLATE_BUILD_BENCHMARKS":       "OFF"
       }
     },
+    {
+      "name": "_import-std",
+      "hidden": true,
+      "description": "Enable 'import std;' — requires CMake 3.30+ and a supported compiler/runtime",
+      "cacheVariables": { "APE_TEMPLATE_IMPORT_STD": "ON" }
+    },
 
     {
       "name": "windows-msvc-debug",
@@ -358,6 +364,44 @@
     },
 
     {
+      "name": "windows-msvc-debug-import-std",
+      "displayName": "Windows · MSVC · Debug · import std",
+      "description": "Debug + 'import std;'. Requires CMake 3.30+ and VS 2022 17.5+.",
+      "inherits": ["_ninja", "_windows-msvc", "_debug", "_import-std"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" }
+    },
+    {
+      "name": "windows-msvc-release-import-std",
+      "displayName": "Windows · MSVC · Release · import std",
+      "description": "Release + 'import std;'. Requires CMake 3.30+ and VS 2022 17.5+.",
+      "inherits": ["_ninja", "_windows-msvc", "_release", "_import-std"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" }
+    },
+
+    {
+      "name": "linux-clang-debug-import-std",
+      "displayName": "Linux · Clang · Debug · import std",
+      "description": "Debug + 'import std;' via libc++. Requires CMake 3.30+, Clang 18+, libc++ with module support (apt install libc++-18-dev).",
+      "inherits": ["_ninja", "_debug", "_clang", "_import-std"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+    },
+    {
+      "name": "linux-clang-release-import-std",
+      "displayName": "Linux · Clang · Release · import std",
+      "description": "Release + 'import std;' via libc++. Same requirements as linux-clang-debug-import-std.",
+      "inherits": ["_ninja", "_release", "_clang", "_import-std"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+    },
+
+    {
+      "name": "linux-gcc-release-import-std",
+      "displayName": "Linux · GCC · Release · import std",
+      "description": "Release + 'import std;' (experimental). Requires CMake 3.30+, GCC 15.2+. clang-tidy disabled (dyndep conflict).",
+      "inherits": ["_ninja", "_release", "_gcc", "_import-std", "_no-tidy"],
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+    },
+
+    {
       "name": "android-arm64",
       "displayName": "Android · arm64-v8a · Release",
       "description": "NDK cross-compile. Set ANDROID_NDK env var to NDK root. Tests disabled (run via ADB).",
@@ -434,6 +478,12 @@
     { "name": "macos-ubsan",     "inherits": "_build-base", "configurePreset": "macos-ubsan"     },
     { "name": "macos-coverage",  "inherits": "_build-base", "configurePreset": "macos-coverage",  "targets": ["coverage"] },
     { "name": "macos-fuzz",      "inherits": "_build-base", "configurePreset": "macos-fuzz"      },
+
+    { "name": "windows-msvc-debug-import-std",   "inherits": "_build-base", "configurePreset": "windows-msvc-debug-import-std"   },
+    { "name": "windows-msvc-release-import-std", "inherits": "_build-base", "configurePreset": "windows-msvc-release-import-std" },
+    { "name": "linux-clang-debug-import-std",    "inherits": "_build-base", "configurePreset": "linux-clang-debug-import-std"    },
+    { "name": "linux-clang-release-import-std",  "inherits": "_build-base", "configurePreset": "linux-clang-release-import-std"  },
+    { "name": "linux-gcc-release-import-std",    "inherits": "_build-base", "configurePreset": "linux-gcc-release-import-std"    },
 
     { "name": "android-arm64", "inherits": "_build-base", "configurePreset": "android-arm64" },
     { "name": "ios-arm64",     "inherits": "_build-base", "configurePreset": "ios-arm64"     },

@@ -1,5 +1,8 @@
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 3.30)
 
+if(APE_TEMPLATE_IMPORT_STD)
+    set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD "d0edc3af-4c50-42ea-a356-e2862fe7a444")
+endif()
 # Project definition
 project(ape-template
     VERSION 0.1.0
@@ -51,6 +54,9 @@ option(APE_TEMPLATE_ENABLE_DISTRIBUTED_BUILD "Enable distributed compilation" OF
 option(APE_TEMPLATE_ENABLE_CLANG_TIDY "Enable clang-tidy" ON)
 option(APE_TEMPLATE_USE_MODULES "Enable C++20/23 modules" ON)
 option(APE_TEMPLATE_INSTALL "Enable local install target" ON)
+option(APE_TEMPLATE_IMPORT_STD
+    "Enable C++23 'import std;' standard library module (requires CMake 3.30+, see cmake/modules/ImportStd.cmake)"
+    OFF)
 
 # ============================================================================
 # C++ Standard and Compiler Requirements
@@ -107,6 +113,17 @@ if(APE_TEMPLATE_USE_MODULES)
     include(cmake/modules/CppModules.cmake)
 endif()
 
+# Enable 'import std;' on supported platforms (requires CMake 3.30+)
+if(APE_TEMPLATE_IMPORT_STD)
+    include(cmake/modules/ImportStd.cmake)
+endif()
+# Always provide a no-op configure_import_std() so src/CMakeLists files can call
+# it unconditionally regardless of whether import std is enabled or supported.
+if(NOT COMMAND configure_import_std)
+    function(configure_import_std target)
+    endfunction()
+endif()
+
 # ============================================================================
 # Third-Party Dependencies
 # ============================================================================
@@ -120,17 +137,7 @@ include(cmake/modules/ThirdParty.cmake)
 if(APE_TEMPLATE_ENABLE_CLANG_TIDY)
     find_program(CLANG_TIDY_EXE NAMES "clang-tidy")
     if(CLANG_TIDY_EXE)
-        set(_clang_tidy_args "${CLANG_TIDY_EXE}")
-        if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND APE_TEMPLATE_USE_MODULES)
-            # When GCC compiles with C++ modules enabled, CMake injects GCC-specific
-            # module scanning flags (-fmodule-mapper, -fdeps-format=p1689r5,
-            # -fmodules-ts) into every compile command. clang-tidy's Clang front-end
-            # does not recognise these GCC-only flags and exits with
-            # "error: unknown argument". -Wno-unknown-argument silences those
-            # diagnostics so clang-tidy can still analyse the C++ source normally.
-            list(APPEND _clang_tidy_args "--extra-arg=-Wno-unknown-argument")
-        endif()
-        set(CMAKE_CXX_CLANG_TIDY "${_clang_tidy_args}")
+        set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE}")
         message(STATUS "clang-tidy found: ${CLANG_TIDY_EXE}")
     else()
         message(WARNING "clang-tidy not found")
@@ -219,6 +226,7 @@ if(APE_TEMPLATE_ENABLE_SANITIZERS)
 endif()
 message(STATUS "  Enable clang-tidy: ${APE_TEMPLATE_ENABLE_CLANG_TIDY}")
 message(STATUS "  Use C++ modules: ${APE_TEMPLATE_USE_MODULES}")
+message(STATUS "  Import std module: ${APE_TEMPLATE_IMPORT_STD}")
 message(STATUS "  Distributed build: ${APE_TEMPLATE_ENABLE_DISTRIBUTED_BUILD}")
 message(STATUS "========================================")
 message(STATUS "")

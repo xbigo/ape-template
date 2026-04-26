@@ -1,5 +1,4 @@
 # Core library
-
 set(CORE_HEADERS
     ${CMAKE_SOURCE_DIR}/include/ape_template/core/version.hpp
 )
@@ -38,6 +37,9 @@ target_link_libraries(ape_template_core PRIVATE ape_template_warnings)
 if(COMMAND extract_debug_symbols)
     extract_debug_symbols(ape_template_core)
 endif()
+
+# Enable 'import std;' when supported and APE_TEMPLATE_IMPORT_STD=ON
+configure_import_std(ape_template_core)
 
 # Installation
 if(APE_TEMPLATE_INSTALL)

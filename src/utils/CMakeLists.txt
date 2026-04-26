@@ -44,6 +44,9 @@ if(COMMAND extract_debug_symbols)
     extract_debug_symbols(ape_template_utils)
 endif()
 
+# Enable 'import std;' when supported and APE_TEMPLATE_IMPORT_STD=ON
+configure_import_std(ape_template_utils)
+
 # Installation
 if(APE_TEMPLATE_INSTALL)
     install(TARGETS ape_template_utils
